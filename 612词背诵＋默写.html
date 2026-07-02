@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影视台词版612阅读高频单词｜背诵+默写打卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", Arial, sans-serif;
+        }
+        :root {
+            --bg: #f7f9fc;
+            --card: #fff;
+            --text: #222;
+            --subtext: #555;
+            --primary: #2563eb;
+            --success: #10b981;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+        .dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --subtext: #cbd5e1;
+            --border: #334155;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px max(10px, calc((100% - 1000px) / 2));
+            transition: 0.3s;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap:12px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        .tool-bar, .card-bar {
+            display: flex;
+            gap:10px;
+            flex-wrap: wrap;
+            margin-bottom:16px;
+        }
+        button, select, input {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border:1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size:14px;
+        }
+        button:hover {
+            background: var(--primary);
+            color:#fff;
+            border-color:var(--primary);
+        }
+        .btn-success {
+            background: var(--success);
+            border-color: var(--success);
+            color:#fff;
+        }
+        .btn-warn {
+            background: var(--warn);
+            border-color: var(--warn);
+            color:#fff;
+        }
+        .btn-danger {
+            background: var(--danger);
+            border-color: var(--danger);
+            color:#fff;
+        }
+        .search-box {
+            width: 300px;
+        }
+        .alphabet-group {
+            margin:16px 0;
+            display:flex;
+            flex-wrap:wrap;
+            gap:6px;
+        }
+        .alphabet-btn {
+            padding:4px 10px;
+        }
+        .tip {
+            color:var(--subtext);
+            font-size:13px;
+            margin:6px 0 12px;
+        }
+        .word-card {
+            background: var(--card);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:20px;
+            margin-bottom:16px;
+        }
+        .word-title {
+            font-size:26px;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+        .phonetic {
+            color:#7c3aed;
+            margin-bottom:10px;
+        }
+        .item-title {
+            font-weight:bold;
+            margin-top:12px;
+            color:var(--primary);
+        }
+        .hide-content {
+            filter: blur(8px);
+            user-select: none;
+        }
+        /* 打卡模块样式 */
+        .clock-card {
+            background: var(--card);
+            border:1px solid var(--primary);
+            border-radius:12px;
+            padding:20px;
+            margin:20px 0;
+        }
+        .clock-title {
+            font-size:20px;
+            color:var(--primary);
+            margin-bottom:16px;
+            font-weight:bold;
+        }
+        .stat-row {
+            display:flex;
+            gap:30px;
+            margin:12px 0;
+            flex-wrap:wrap;
+        }
+        .stat-item {
+            font-size:15px;
+        }
+        .mem-item {
+            border-top:1px solid var(--border);
+            padding:12px 0;
+        }
+        .mem-word {
+            font-size:20px;
+            font-weight:bold;
+            margin-bottom:8px;
+        }
+        .mem-input {
+            width:100%;
+            margin:8px 0;
+            padding:10px;
+        }
+        .answer-right {
+            color:#10b981;
+            margin-top:8px;
+        }
+        .answer-wrong {
+            color:#ef4444;
+            margin-top:8px;
+        }
+        .tabs {
+            display:flex;
+            gap:8px;
+            margin-bottom:16px;
+        }
+        .tab {
+            padding:8px 16px;
+            border-radius:6px;
+            border:1px solid var(--border);
+        }
+        .tab.active {
+            background:var(--primary);
+            color:#fff;
+            border-color:var(--primary);
+        }
+        .page-box {
+            display:none;
+        }
+        .page-box.active {
+            display:block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>612英语阅读高频词｜背诵+默写打卡器</h1>
+        <div class="tool-bar">
+            <input class="search-box" id="searchInput" placeholder="输入单词快速查询">
+            <button id="searchBtn">查询单词</button>
+            <button id="randomBtn">随机抽一个单词</button>
+            <button id="toggleHide">隐藏释义自测（修复版）</button>
+            <button id="darkBtn">切换深色模式</button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="read">单词背诵页</div>
+        <div class="tab" data-tab="clock">默写打卡页</div>
+    </div>
+
+    <!-- 背诵页面 -->
+    <div class="page-box active" id="page-read">
+        <div class="alphabet-group" id="alphaBox"></div>
+        <div class="tip">提示：点击上方字母筛选对应首字母；随机抽词、隐藏释义不会跳顶部</div>
+        <div id="wordContainer"></div>
+    </div>
+
+    <!-- 默写打卡页面 -->
+    <div class="page-box" id="page-clock">
+        <div class="clock-card">
+            <div class="clock-title">📝 单词默写打卡系统</div>
+            <div class="stat-row">
+                <div class="stat-item">今日目标：<span id="targetNum">0</span> 词</div>
+                <div class="stat-item">今日已完成：<span id="doneNum">0</span> 词</div>
+                <div class="stat-item">累计打卡天数：<span id="totalClock">0</span> 天</div>
+            </div>
+            <div class="card-bar">
+                <select id="dayCountSelect">
+                    <option value="10">每日10词</option>
+                    <option value="20">每日20词</option>
+                    <option value="30">每日30词</option>
+                    <option value="50">每日50词</option>
+                </select>
+                <button class="btn-success" id="genClockBtn">生成今日默写词库</button>
+                <button class="btn-warn" id="resetTodayBtn">重置今日打卡</button>
+                <button class="btn-danger" id="clearAllBtn">清空全部打卡记录</button>
+            </div>
+            <div id="memList"></div>
+        </div>
+    </div>
+
+<script>
+// 全局变量修复：初始值设为0，页面加载渲染不会滚动报错
+let currentShowIndex = 0;
+let isHide = false;
+
+// 完整示范单词数组（可替换你完整612词JSON数组）
+const wordList = [
+    {"word":"abandon","phonetic":"[əˈbændən]","meaning":"vt. 放弃；丢弃；遗弃","collocation":"abandon oneself to 沉溺于；abandon a plan 放弃计划","movie":"《肖申克的救赎》Hope is a good thing, maybe the best of things, and no good thing ever abandons us.","sentence":"He abandoned his fear and escaped from the dark prison."},
+    {"word":"abnormal","phonetic":"[æbˈnɔ:ml]","meaning":"adj.反常的；异常的","collocation":"abnormal behavior 反常行为；abnormal weather 异常天气","movie":"《哈利波特》Your abnormal magic power makes you different from ordinary kids.","sentence":"The doctor said his heart rate was abnormal."},
+    {"word":"absolute","phonetic":"[ˈæbsəlu:t]","meaning":"adj. 完全的；不容置疑的；绝对的","collocation":"absolute truth 绝对真理；absolute silence 万籁俱寂","movie":"《阿甘正传》I have absolute faith that Jenny will come back to me one day.","sentence":"We need absolute trust between partners."},
+    {"word":"absorb","phonetic":"[əbˈsɔ:b]","meaning":"vt. 吸收；吸引…的注意","collocation":"absorb knowledge 吸收知识；be absorbed in 全神贯注于","movie":"《当幸福来敲门》Chris absorbed every financial knowledge to change his fate.","sentence":"She was absorbed in reading and didn’t hear the bell."},
+    {"word":"absorption","phonetic":"[əbˈsɔ:pʃn]","meaning":"n. 吸收；专心","collocation":"absorption of nutrients 营养吸收；absorption in study 专心学习","movie":"《心灵捕手》His absorption in math amazed all professors.","sentence":"Good sleep helps the absorption of food."},
+    {"word":"abstract","phonetic":"[ˈæbstrækt]","meaning":"adj. 抽象的 n. 摘要，梗概","collocation":"abstract thinking 抽象思维；paper abstract 论文摘要","movie":"《美丽心灵》Math is full of abstract concepts hard for normal people to understand.","sentence":"Please write an abstract for your report within 200 words."},
+    {"word":"academic","phonetic":"[ækə'demɪk]","meaning":"adj. 学校的；学术的","collocation":"academic performance 学业成绩；academic research 学术研究","movie":"《死亡诗社》Don’t only chase academic scores, chase your true passion.","sentence":"He published many academic papers in famous journals."},
+    {"word":"accidental","phonetic":"[ˌæksɪˈdentl]","meaning":"adj. 偶然的，意外的","collocation":"accidental meeting 偶遇；accidental injury 意外伤害","movie":"《泰坦尼克号》Their accidental encounter on the ship changed both of their lives.","sentence":"This accidental discovery won him a science prize."},
+    {"word":"accommodate","phonetic":"[əˈkɒmədeɪt]","meaning":"vt. 为…提供住处；容纳","collocation":"accommodate guests 接待客人；accommodate 500 people 容纳500人","movie":"《老友记》My small apartment can’t accommodate all six of you at once.","sentence":"The hotel can accommodate thousands of tourists every summer."},
+    {"word":"accompany","phonetic":"[əˈkʌmpəni]","meaning":"vt. 陪伴；伴奏，伴唱","collocation":"accompany sb to sp 陪某人去某地；accompany a song 为歌曲伴奏","movie":"《忠犬八公》The dog accompanied his owner to the station every morning.","sentence":"Will you accompany me to the hospital tomorrow?"},
+    {"word":"accomplish","phonetic":"[əˈkʌmplɪʃ]","meaning":"vt.达到，实现，完成","collocation":"accomplish a goal 实现目标；accomplish a task 完成任务","movie":"《肖申克的救赎》It took Andy 19 years to accomplish his escape plan.","sentence":"With hard work, you can accomplish anything you dream of."},
+    {"word":"accuracy","phonetic":"[ˈækjərəsi]","meaning":"n. 准确性","collocation":"improve accuracy 提升准确度；data accuracy 数据精准度","movie":"《星际穿越》The accuracy of the calculation decided our survival.","sentence":"Check the data twice to guarantee accuracy."},
+    {"word":"accurate","phonetic":"[ˈækjərət]","meaning":"adj. 准确的，精确的","collocation":"accurate description 精准描述；accurate forecast 准确预测","movie":"《火星救援》You need accurate data to grow potatoes on Mars.","sentence":"His report gives an accurate picture of the situation."},
+    {"word":"accuse","phonetic":"[əˈkju:z]","meaning":"vt. 指控；指责","collocation":"accuse sb of sth 指控某人某事；accuse publicly 公开指责","movie":"《控方证人》They accuse him of murdering his wife.","sentence":"People accuse him of breaking the promise."},
+    {"word":"acknowledge","phonetic":"[əkˈnɒlɪdʒ]","meaning":"vt. 承认；对…表示感谢；告知收到","collocation":"acknowledge defeat 承认失败；acknowledge one’s mistake 认错","movie":"《绿皮书》He finally acknowledged the unfairness of the world.","sentence":"I acknowledge that I made a wrong decision."},
+    {"word":"acquire","phonetic":"[əˈkwaɪə(r)]","meaning":"vt. 取得，获得；学到","collocation":"acquire knowledge 获取知识；acquire a habit 养成习惯","movie":"《当幸福来敲门》You can acquire wealth only if you never give up.","sentence":"Children acquire language quickly at an early age."},
+    {"word":"adapt","phonetic":"[əˈdæpt]","meaning":"v. （使）适应；改编","collocation":"adapt to life 适应生活；adapt a novel 改编小说","movie":"《荒野生存》It’s hard to adapt to the wild environment alone.","sentence":"We must adapt ourselves to the new rules."},
+    {"word":"adequate","phonetic":"[ˈædɪkwət]","meaning":"adj. 足够的；适当的","collocation":"adequate preparation 充分准备；adequate funds 充足资金","movie":"《楚门的世界》You don’t have adequate courage to walk out of the fake world.","sentence":"The room is adequate for three people."},
+    {"word":"adjust","phonetic":"[əˈdʒʌst]","meaning":"v. 调整，调节","collocation":"adjust the plan 调整计划；adjust to pressure 适应压力","movie":"《心灵奇旅》Adjust your mind and you will find joy in small things.","sentence":"She adjusted her schedule to spend more time with family."},
+    {"word":"adolescent","phonetic":"[ˌædəˈlesnt]","meaning":"n. 青少年 adj. 青春期的；青少年的","collocation":"adolescent psychology 青少年心理；adolescent trouble 青春期烦恼","movie":"《壁花少年》Every adolescent has hidden pain inside.","sentence":"The course is designed for adolescents aged 13 to 17."},
+    {"word":"adopt","phonetic":"[əˈdɒpt]","meaning":"vt. 采纳，采用；收养","collocation":"adopt a suggestion 采纳建议；adopt a child 收养孩子","movie":"《寻梦环游记》The family adopted the little stray dog warmly.","sentence":"The company decided to adopt new management methods."},
+    {"word":"advisable","phonetic":"[ədˈvaɪzəbl]","meaning":"adj. 明智的，合情合理的","collocation":"it is advisable to do 做…是明智的","movie":"《教父》It’s advisable to stay calm when facing threats.","sentence":"It’s advisable to wear a coat in cold weather."},
+    {"word":"advocate","phonetic":"[ˈædvəkeɪt]","meaning":"vt. 拥护；提倡 n. 提倡者，拥护者","collocation":"advocate environmental protection 倡导环保；a strong advocate 坚定支持者","movie":"《永不妥协》She advocates equal rights for all residents.","sentence":"Many experts advocate regular exercise."},
+    {"word":"affection","phonetic":"[əˈfekʃn]","meaning":"n. 喜爱；影响；疾病","collocation":"deep affection 深情；show affection 表达爱意","movie":"《爱在黎明破晓前》Their affection grew stronger as they talked all night.","sentence":"He has great affection for his hometown."},
+    {"word":"aggressive","phonetic":"[əˈgresɪv]","meaning":"adj. 侵犯的，好斗的；有进取心的","collocation":"aggressive attitude 咄咄逼人的态度；aggressive spirit 进取精神","movie":"《摔跤吧爸爸》You need an aggressive spirit to win the match.","sentence":"The boss is aggressive in expanding business."},
+    {"word":"agreeable","phonetic":"[əˈgri:əbl]","meaning":"adj. 令人愉快的；惬意的","collocation":"agreeable weather 宜人天气；agreeable voice 悦耳嗓音","movie":"《傲慢与偏见》Her agreeable personality wins everyone’s favor.","sentence":"We spent an agreeable afternoon by the lake."},
+    {"word":"alert","phonetic":"[ə'lə:t]","meaning":"adj. 警觉的，警惕的 vt. 向…报警；使警觉 n. 警戒状态","collocation":"stay alert 保持警惕；alert sb to danger 提醒某人危险","movie":"《碟中谍》Stay alert, danger is everywhere.","sentence":"Drivers must stay alert at night."},
+    {"word":"alter","phonetic":"['ɔ:ltə]","meaning":"v. 改变；（使）变样","collocation":"alter one’s plan 修改计划；alter appearance 改变外貌","movie":"《楚门的世界》Nothing can alter my decision to leave.","sentence":"The weather altered suddenly in the afternoon."},
+    {"word":"alternative","phonetic":"[ɔ:lˈtɜ:nətɪv]","meaning":"adj.供选择的 n.两者择一；抉择","collocation":"alternative choice 备选方案；alternative energy 替代能源","movie":"《星际穿越》We have no alternative but to leave Earth.","sentence":"We have two alternatives to solve the problem."},
+    {"word":"ambition","phonetic":"[æmˈbɪʃn]","meaning":"n. 强烈欲望；志向","collocation":"great ambition 远大抱负；realize one’s ambition 实现志向","movie":"《当幸福来敲门》Don’t lose your ambition even in hard times.","sentence":"His ambition is to become a doctor."},
+    {"word":"amuse","phonetic":"[əˈmju:z]","meaning":"vt. 逗乐，娱乐","collocation":"amuse oneself by reading 读书自娱；amuse the crowd 逗乐众人","movie":"《老友记》Ross’s silly words amuse all of us.","sentence":"The funny cartoon amused the children."},
+    {"word":"amusing","phonetic":"[əˈmju:zɪŋ]","meaning":"adj. 有趣的","collocation":"an amusing story 有趣的故事；amusing joke 搞笑笑话","movie":"《小鬼当家》The movie is full of amusing plots.","sentence":"He told an amusing experience during travel."},
+    {"word":"analyze","phonetic":"['ænəlaɪz]","meaning":"vt. 分析","collocation":"analyze data 分析数据；analyze the cause 分析原因","movie":"《心灵捕手》He can analyze complex math problems in seconds.","sentence":"We need to analyze the failure carefully."},
+    {"word":"angle","phonetic":"[ˈæŋgl]","meaning":"n. 角度","collocation":"from different angles 从不同角度；viewpoint angle 视角","movie":"《十二怒汉》Look at the case from another angle.","sentence":"The photographer changed the angle to take a better photo."},
+    {"word":"anxiety","phonetic":"[æŋˈzaɪəti]","meaning":"n. 焦虑；渴望","collocation":"relieve anxiety 缓解焦虑；anxiety for success 渴望成功","movie":"《海边曼彻斯特》He is trapped in endless anxiety all day.","sentence":"Too much work brings him great anxiety."},
+    {"word":"anyway","phonetic":"['eniweɪ]","meaning":"adv. 不管怎样；无论如何","collocation":"go ahead anyway 无论如何坚持下去","movie":"《阿甘正传》Life is like a box of chocolates, anyway, keep moving forward.","sentence":"It rained, but we went hiking anyway."},
+    {"word":"anyhow","phonetic":"['enihaʊ]","meaning":"adv. 不管怎样；无论如何","collocation":"anyhow it’s over 不管怎样都结束了","movie":"《泰坦尼克号》Anyhow, I’m glad I met you.","sentence":"Anyhow, I will finish the task today."},
+    {"word":"apparent","phonetic":"[əˈpærənt]","meaning":"adj. 显然的","collocation":"it is apparent that 显然…；apparent difference 明显差异","movie":"《肖申克的救赎》It’s apparent that Andy never gave up hope.","sentence":"His disappointment was apparent on his face."},
+    {"word":"application","phonetic":"[ˌæplɪˈkeɪʃn]","meaning":"n. 应用；申请（表）","collocation":"job application 求职申请；practical application 实际应用","movie":"《当幸福来敲门》He filled out dozens of application forms every day.","sentence":"This new tool has wide application in daily life."},
+    {"word":"appropriate","phonetic":"[əˈprəʊpriət]","meaning":"adj. 合适的，适当的","collocation":"appropriate behavior 得体举止；appropriate time 合适时机","movie":"《傲慢与偏见》Choose appropriate words when talking to elders.","sentence":"Please wear appropriate clothes for the meeting."},
+    {"word":"approve","phonetic":"[əˈpru:v]","meaning":"v. 批准；赞成","collocation":"approve of sb’s plan 赞成某人计划；approve a project 批准项目","movie":"《死亡诗社》The headmaster didn’t approve of our free thinking.","sentence":"My parents finally approved my travel plan."},
+    {"word":"artificial","phonetic":"[ˌɑ:tɪˈfɪʃl]","meaning":"adj.人工的，人造的","collocation":"artificial intelligence 人工智能；artificial flower 人造花","movie":"《银翼杀手》Artificial humans also have true feelings.","sentence":"This fruit flavor is artificial, not natural."},
+    {"word":"ashamed","phonetic":"[əˈʃeɪmd]","meaning":"adj.惭愧的，羞耻的","collocation":"be ashamed of one’s action 为行为羞愧；feel ashamed 感到惭愧","movie":"《绿皮书》He felt ashamed of his unfair prejudice.","sentence":"I’m ashamed of lying to my teacher."},
+    {"word":"assess","phonetic":"[əˈses]","meaning":"vt. 评价，评估","collocation":"assess risk 评估风险；assess performance 评价表现","movie":"《肖申克的救赎》No one can assess a man’s value by his prison uniform.","sentence":"Experts will assess the damage after the storm."},
+    {"word":"associate","phonetic":"[əˈsəʊʃieɪt]","meaning":"vt. 联系，联合","collocation":"associate A with B 把A和B联系；associate with friends 结交朋友","movie":"《哈利波特》People associate magic with Hogwarts.","sentence":"We often associate summer with ice cream."},
+    {"word":"assume","phonetic":"[əˈsju:m]","meaning":"vt. 假定；承担","collocation":"assume responsibility 承担责任；assume that… 假定…","movie":"《星际穿越》Don’t assume everything will go well.","sentence":"We assume he will arrive on time."},
+    {"word":"assumption","phonetic":"[əˈsʌmpʃn]","meaning":"n. 假定；承担","collocation":"make an assumption 做出假设；wrong assumption 错误设想","movie":"《十二怒汉》All your judgment is based on a false assumption.","sentence":"The whole plan rests on a risky assumption."},
+    {"word":"assure","phonetic":"[əˈʃʊə(r)]","meaning":"vt. 使（某人）确信；确保","collocation":"assure sb of safety 向某人保证安全；assure success 确保成功","movie":"《泰坦尼克号》I assure you I will never let go of your hand.","sentence":"I assure you that I will finish the work."},
+    {"word":"astonish","phonetic":"[əˈstɒnɪʃ]","meaning":"vt. 使惊讶","collocation":"astonish the public 令大众震惊；be astonished at 对…感到吃惊","movie":"《阿甘正传》His success astonished everyone around him.","sentence":"The news astonished all the students."},
+    {"word":"attach","phonetic":"[əˈtætʃ]","meaning":"vt. 连接；使依附","collocation":"attach importance to 重视；attach a file 附上文件","movie":"《哈利波特》Students attach great importance to magic lessons.","sentence":"Please attach your photo to the form."},
+    {"word":"authority","phonetic":"[ɔ:ˈθɒrəti]","meaning":"n. 权力，权威","collocation":"local authority 地方当局；have authority over 对…有管辖权","movie":"《死亡诗社》We should not blindly obey authority.","sentence":"He is an authority on environmental protection."},
+    {"word":"automatic","phonetic":"[ˌɔ:təˈmætɪk]","meaning":"adj. 自动的","collocation":"automatic door 自动门；automatic system 自动化系统","movie":"《机器人总动员》The spaceship runs on automatic control.","sentence":"This camera has automatic focus function."},
+    {"word":"awkward","phonetic":"[ˈɔ:kwəd]","meaning":"adj.笨拙的；使用不便的；难处理的","collocation":"awkward silence 尴尬沉默；awkward movement 笨拙动作","movie":"《壁花少年》He felt awkward when talking with strangers.","sentence":"I felt awkward when I broke the glass."},
+    {"word":"bacteria","phonetic":"[bækˈtɪəriə]","meaning":"n. 细菌","collocation":"kill bacteria 杀菌；harmful bacteria 有害细菌","movie":"《传染病》We need to stop bacteria from spreading quickly.","sentence":"Wash hands to remove bacteria."},
+    {"word":"barely","phonetic":"[ˈbeəli]","meaning":"adv. 几乎不；仅仅","collocation":"barely survive 勉强存活；barely enough 勉强够用","movie":"《当幸福来敲门》He barely had money to buy food for his son.","sentence":"I barely caught the last bus home."},
+    {"word":"barrier","phonetic":"[ˈbæriə(r)]","meaning":"n. 障碍物；栅栏","collocation":"language barrier 语言障碍；break down barriers 打破隔阂","movie":"《绿皮书》Skin color should not be a barrier between people.","sentence":"High walls act as a barrier to wind."},
+    {"word":"basically","phonetic":"[ˈbeɪsɪkli]","meaning":"adv. 基本上","collocation":"basically the same 大体相同；basically finished 基本完成","movie":"《老友记》Basically, we are all just looking for love.","sentence":"The plan is basically ready for use."},
+    {"word":"beneficial","phonetic":"[ˌbenɪˈfɪʃl]","meaning":"adj. 有益的","collocation":"be beneficial to health 有益健康；beneficial cooperation 互利合作","movie":"《心灵奇旅》Every small experience is beneficial to your growth.","sentence":"Morning exercise is beneficial to your body."},
+    {"word":"bitter","phonetic":"[ˈbɪtə(r)]","meaning":"adj. 苦味的；使人悲痛的","collocation":"bitter medicine 苦药；bitter memory 痛苦回忆","movie":"《海边曼彻斯特》He carries bitter memories for many years.","sentence":"The coffee tastes bitter without sugar."},
+    {"word":"block","phonetic":"[blɒk]","meaning":"n. 大块；街区 vt. 堵塞；阻碍","collocation":"block the road 堵路；a block of wood 一块木头","movie":"《肖申克的救赎》The stone wall blocked all hope at first.","sentence":"Trees block the sunlight in summer."},
+    {"word":"boast","phonetic":"[bəʊst]","meaning":"vi/n. 吹嘘，自吹自擂 vt. 吹嘘；以拥有……而自豪","collocation":"boast about achievements 吹嘘成就；boast a beautiful garden 拥有漂亮花园引以为傲","movie":"《了不起的盖茨比》He did not boast about his wealth.","sentence":"The town boasts a famous old library."},
+    {"word":"boom","phonetic":"[bu:m]","meaning":"n. 繁荣期；暴涨 v. 繁荣；迅速发展","collocation":"economic boom 经济繁荣；tourism boom 旅游业兴盛","movie":"《华尔街》The market boom brought huge opportunities.","sentence":"The online shopping industry boomed in recent years."},
+    {"word":"brief","phonetic":"[bri:f]","meaning":"adj. 简要的，短暂的 n. 概要 vt. 概述","collocation":"brief introduction 简介；brief meeting 简短会议","movie":"《泰坦尼克号》Our time together was brief but unforgettable.","sentence":"Please give a brief report of your work."},
+    {"word":"brilliant","phonetic":"[ˈbrɪliənt]","meaning":"adj. 灿烂的；才华横溢的；卓越的","collocation":"brilliant sunshine 灿烂阳光；brilliant mind 聪慧头脑","movie":"《心灵捕手》He has a brilliant talent for mathematics.","sentence":"We watched a brilliant performance last night."},
+    {"word":"budget","phonetic":"[ˈbʌdʒɪt]","meaning":"n. 预算 v. 编入预算，安排","collocation":"monthly budget 月度预算；budget for travel 规划旅行开支","movie":"《当幸福来敲门》We have a tight budget this month.","sentence":"Families should budget their money reasonably."},
+    {"word":"burden","phonetic":"[ˈbɜ:dn]","meaning":"n.负荷，重负 vt. 加负荷于","collocation":"heavy burden 沉重负担；burden sb with troubles 给某人添烦恼","movie":"《忠犬八公》Waiting every day became a sweet burden for him.","sentence":"Don’t burden your parents with all your problems."},
+    {"word":"campaign","phonetic":"[kæmˈpeɪn]","meaning":"n. 战役，运动；竞选运动 vi. 发起运动；竞选","collocation":"environmental campaign 环保活动；election campaign 竞选活动","movie":"《永不妥协》She started a campaign to protect residents’ rights.","sentence":"The school launched a reading campaign last week."},
+    {"word":"candidate","phonetic":"[ˈkændɪdət]","meaning":"n. 候选人；求职者","collocation":"job candidate 求职者；presidential candidate 总统候选人","movie":"《当幸福来敲门》He was one of dozens of candidates for the job.","sentence":"There are five candidates for this position."},
+    {"word":"capture","phonetic":"[ˈkæptʃə(r)]","meaning":"vt./n. 捕获；占领；俘虏","collocation":"capture the city 攻占城池；capture one’s heart 俘获人心","movie":"《泰坦尼克号》The beautiful picture captured my eyes at once.","sentence":"The photo captured her happy smile perfectly."},
+    {"word":"casual","phonetic":"[ˈkæʒuəl]","meaning":"adj. 偶然的；随便的；漫不经心的","collocation":"casual talk 闲聊；casual clothes 休闲装","movie":"《爱在黎明破晓前》It was just a casual meeting on the train.","sentence":"You can wear casual clothes for the party."},
+    {"word":"characteristic","phonetic":"[ˌkærəktəˈrɪstɪk]","meaning":"n.特征，特色 adj.特有的","collocation":"main characteristic 主要特征；characteristic style 独特风格","movie":"《哈利波特》Bravery is a characteristic of Gryffindor students.","sentence":"Optimism is her most obvious characteristic."},
+    {"word":"charge","phonetic":"[tʃɑ:dʒ]","meaning":"n. 掌管；费用；充电；控告 vt. 收费；充电；控告","collocation":"in charge of 负责；charge money 收费；charge sb with theft 控告偷窃","movie":"《肖申克的救赎》The warden was in charge of the whole prison.","sentence":"The hotel charges 200 yuan per night."},
+    {"word":"charity","phonetic":"[ˈtʃærəti]","meaning":"n. 慈善；慈善组织","collocation":"charity donation 慈善捐款；work for charity 从事慈善事业","movie":"《当幸福来敲门》He gave small money to charity even when poor.","sentence":"Many stars donate money to charity every year."},
+    {"word":"civilization","phonetic":"[ˌsɪvəlaɪˈzeɪʃn]","meaning":"n. 文明；开化","collocation":"ancient civilization 古代文明；human civilization 人类文明","movie":"《2001太空漫游》The film shows the progress of human civilization.","sentence":"China has a long history of civilization."},
+    {"word":"civilized","phonetic":"[ˈsɪvəlaɪzd]","meaning":"adj.文明的；开化的","collocation":"civilized society 文明社会；civilized behavior 文明举止","movie":"《绿皮书》We should treat every person in a civilized way.","sentence":"Please keep civilized manners in public."},
+    {"word":"classification","phonetic":"[ˌklæsɪfɪˈkeɪʃn]","meaning":"n. 分类","collocation":"waste classification 垃圾分类；data classification 数据分类","movie":"《美丽心灵》His classification of math theories won high praise.","sentence":"The classification of books makes searching easier."},
+    {"word":"classify","phonetic":"[ˈklæsɪfaɪ]","meaning":"vt. 分类，把…归类；分级","collocation":"classify garbage 垃圾分类；classify students by grades 按成绩划分学生","movie":"《心灵捕手》He can classify all kinds of books quickly.","sentence":"We classify animals by their living habits."},
+    {"word":"clue","phonetic":"[klu:]","meaning":"n. 线索，提示","collocation":"find a clue 找到线索；important clue 关键线索","movie":"《控方证人》Every small detail may become a clue.","sentence":"The police searched for clues all night."},
+    {"word":"coincidence","phonetic":"[kəʊˈɪnsɪdəns]","meaning":"n. 巧合","collocation":"pure coincidence 纯属巧合；strange coincidence 奇妙巧合","movie":"《泰坦尼克号》What a coincidence that we met again here.","sentence":"It’s just a coincidence that we wore the same coat."},
+    {"word":"collapse","phonetic":"[kəˈlæps]","meaning":"vi. 塌下；崩溃","collocation":"the building collapses 大楼倒塌；mental collapse 精神崩溃","movie":"《星际穿越》The farm collapsed after the terrible storm.","sentence":"He collapsed after running ten kilometers."},
+    {"word":"combination","phonetic":"[ˌkɒmbɪˈneɪʃn]","meaning":"n. 结合（混合）体","collocation":"perfect combination 完美结合；combination of work and rest 劳逸结合","movie":"《寻梦环游记》It’s a combination of tradition and love.","sentence":"The song is a combination of pop and folk music."},
+    {"word":"combine","phonetic":"[kəmˈbaɪn]","meaning":"v. (使)结合（混合，组合）","collocation":"combine theory with practice 理论结合实践；combine two plans 合并两个方案","movie":"《阿甘正传》He combines running with thinking about life.","sentence":"We combine exercise with healthy eating."},
+    {"word":"comment","phonetic":"[ˈkɒment]","meaning":"n./v. 评论","collocation":"make a comment 发表评论；comment on the news 评论新闻","movie":"《十二怒汉》No one dared to comment on his opinion at first.","sentence":"People comment on the movie online every day."},
+    {"word":"commercial","phonetic":"[kəˈmɜ:ʃl]","meaning":"adj. 商业的；营利性的 n.商业广告","collocation":"commercial value 商业价值；TV commercial 电视广告","movie":"《华尔街》All they care about is commercial profit.","sentence":"This film has great commercial success."},
+    {"word":"common","phonetic":"[ˈkɒmən]","meaning":"adj. 一般的,普通的；共同的；常见的","collocation":"common sense 常识；common goal 共同目标","movie":"《阿甘正传》We share common hopes for the future.","sentence":"This plant is common in southern China."},
+    {"word":"comparatively","phonetic":"[kəmˈpærətɪvli]","meaning":"adv. 相比较而言；相对地","collocation":"comparatively cheap 相对便宜；comparatively easy 相对简单","movie":"《当幸福来敲门》His life is comparatively better now.","sentence":"This task is comparatively light for me."},
+    {"word":"comparison","phonetic":"[kəmˈpærɪsn]","meaning":"n. 比较","collocation":"by comparison 相比之下；make a comparison 进行对比","movie":"《傲慢与偏见》There is no comparison between the two men.","sentence":"The comparison shows obvious differences."},
+    {"word":"complex","phonetic":"[ˈkɒmpleks]","meaning":"adj. 复杂的","collocation":"complex problem 复杂问题；complex system 复杂系统","movie":"《星际穿越》The space task is extremely complex.","sentence":"The machine has a complex internal structure."},
+    {"word":"complicated","phonetic":"[ˈkɒmplɪkeɪtɪd]","meaning":"adj. 复杂的","collocation":"complicated relationship 复杂关系；complicated rules 繁琐规则","movie":"《教父》The story has many complicated plots.","sentence":"Don’t make things more complicated."},
+    {"word":"compliment","phonetic":"[ˈkɒmplɪmənt]","meaning":"n/vt. 赞美；恭维","collocation":"pay a compliment 称赞；compliment sb on sth 因某事夸奖某人","movie":"《傲慢与偏见》He dared not compliment her directly.","sentence":"I want to compliment you on your great progress."},
+    {"word":"comprehensive","phonetic":"[ˌkɒmprɪˈhensɪv]","meaning":"adj.广泛的，综合的；理解的","collocation":"comprehensive review 全面复习；comprehensive plan 综合方案","movie":"《死亡诗社》We need a comprehensive understanding of poetry.","sentence":"This book gives a comprehensive introduction to history."},
+    {"word":"conceal","phonetic":"[kənˈsi:l]","meaning":"vt. 隐藏；隐瞒","collocation":"conceal the truth 隐瞒真相；conceal one’s feelings 掩饰情绪","movie":"《肖申克的救赎》Andy concealed the hammer inside the wall.","sentence":"She tried to conceal her sadness from others."},
+    {"word":"concept","phonetic":"[ˈkɒnsept]","meaning":"n.概念；观念；思想","collocation":"basic concept 基本概念；new concept 新理念","movie":"《美丽心灵》He created a new math concept.","sentence":"Children slowly build the concept of time."},
+    {"word":"concern","phonetic":"[kənˈsɜ:n]","meaning":"n. 有关的事；关心；忧虑 vt. 与…有关，涉及；使担心","collocation":"public concern 公众关切；concern about safety 担忧安全","movie":"《永不妥协》The pollution is a big concern for all villagers.","sentence":"This problem concerns every student in class."},
+    {"word":"conclude","phonetic":"[kənˈklu:d]","meaning":"v. 结束；下结论称；推断出","collocation":"conclude a meeting 结束会议；conclude from evidence 根据证据推断","movie":"《肖申克的救赎》We can conclude that hope never dies.","sentence":"We conclude that hard work leads to success."},
+    {"word":"concrete","phonetic":"[ˈkɒŋkri:t]","meaning":"adj.具体的，实在的 n. 混凝土 vt.用混凝土浇筑","collocation":"concrete example 具体例子；concrete plan 切实方案","movie":"《心灵捕手》Give me concrete proof of your theory.","sentence":"We need concrete suggestions instead of empty words."},
+    {"word":"confess","phonetic":"[kənˈfes]","meaning":"vt. 承认；坦白","collocation":"confess one’s mistake 认错；confess to doing sth 坦白做过某事","movie":"《控方证人》He finally confessed his crime in court.","sentence":"He confessed that he broke the window."},
+    {"word":"confirm","phonetic":"[kənˈfɜ:m]","meaning":"vt. 证实；确认","collocation":"confirm the news 证实消息；confirm reservation 确认预定","movie":"《泰坦尼克号》The letter confirmed that he would come back.","sentence":"Please confirm your attendance by tomorrow."},
+    {"word":"conflict","phonetic":"[ˈkɒnflɪkt]","meaning":"n./vi. 冲突；战斗","collocation":"conflict between two sides 双方冲突；cultural conflict 文化冲突","movie":"《绿皮书》There is a conflict between their different backgrounds.","sentence":"The two teams came into conflict over the rule."},
+    {"word":"confuse","phonetic":"[kənˈfju:z]","meaning":"vt. 使混乱；使困惑","collocation":"confuse A with B 混淆A和B；confuse the audience 让观众迷惑","movie":"《盗梦空间》The layers of dreams confuse many people.","sentence":"The similar words confuse young learners."},
+    {"word":"conquer","phonetic":"[ˈkɒŋkə(r)]","meaning":"vt. 攻克，征服","collocation":"conquer fear 克服恐惧；conquer difficulties 战胜困难","movie":"《阿甘正传》You can conquer anything if you keep running forward.","sentence":"We must conquer our laziness to study well."},
+    {"word":"consequence","phonetic":"[ˈkɒnsɪkwəns]","meaning":"n. 结果，后果；重要性","collocation":"serious consequence 严重后果；face the consequence 承担后果","movie":"《星际穿越》Every choice has its own consequence.","sentence":"Smoking will bring bad consequences to your health."},
+    {"word":"consequently","phonetic":"[ˈkɒnsɪkwəntli]","meaning":"adv. 结果，因此","collocation":"work hard, consequently get good grades 努力因此取得好成绩","movie":"《当幸福来敲门》He lost his job, consequently he had no money to pay rent.","sentence":"It rained heavily; consequently the sports meeting was canceled."},
+    {"word":"considerable","phonetic":"[kənˈsɪdərəbl]","meaning":"adj. 相当大的，可观的；重大的","collocation":"considerable progress 巨大进步；considerable cost 高额成本","movie":"《华尔街》He made a considerable profit from the trade.","sentence":"There is a considerable difference between the two plans."},
+    {"word":"considerate","phonetic":"[kənˈsɪdərət]","meaning":"adj. 体谅的；考虑周到的","collocation":"be considerate to others 体谅他人；considerate behavior 贴心举动","movie":"《绿皮书》Tony is rough but considerate deep inside.","sentence":"It’s considerate of you to prepare hot water for me."},
+    {"word":"constant","phonetic":"[ˈkɒnstənt]","meaning":"adj. 不断的；经常的；持久不变的","collocation":"constant effort 不懈努力；constant temperature 恒温","movie":"《阿甘正传》His constant love for Jenny never faded.","sentence":"The machine keeps a constant speed all day."},
+    {"word":"construct","phonetic":"[kənˈstrʌkt]","meaning":"vt. 建造，构成","collocation":"construct a bridge 建造桥梁；construct a theory 构建理论","movie":"《肖申克的救赎》Andy constructed a tunnel little by little.","sentence":"They plan to construct a new library next year."},
+    {"word":"constructive","phonetic":"[kənˈstrʌktɪv]","meaning":"adj. 建设性的","collocation":"constructive advice 建设性建议；constructive discussion 有益讨论","movie":"《死亡诗社》The teacher gave us many constructive suggestions.","sentence":"Please offer constructive opinions instead of only complaints."},
+    {"word":"consult","phonetic":"[kənˈsʌlt]","meaning":"vt. 请教；查阅","collocation":"consult a teacher 请教老师；consult a dictionary 查词典","movie":"《心灵捕手》He refused to consult the professors at first.","sentence":"Consult the map before setting off."},
+    {"word":"consumption","phonetic":"[kənˈsʌmpʃn]","meaning":"n. 消耗；消费","collocation":"energy consumption 能源消耗；daily consumption 日常消费","movie":"《华尔街》The market relies on public consumption.","sentence":"The consumption of water rises in summer."},
+    {"word":"contact","phonetic":"[ˈkɒntækt]","meaning":"n.接触，联系 vt. 与…接触/联系","collocation":"keep contact 保持联系；contact sb by phone 电话联系某人","movie":"《泰坦尼克号》I hope we can keep contact after separating.","sentence":"Please contact me if you need help."},
+    {"word":"contemporary","phonetic":"[kənˈtemprəri]","meaning":"adj. 当代的；同时代的","collocation":"contemporary art 当代艺术；contemporary writers 当代作家","movie":"《爱乐之城》The film shows contemporary young people’s dreams.","sentence":"We study contemporary history in this class."},
+    {"word":"content","phonetic":"['kɒntent]","meaning":"n.（常~s）内容；目录 adj. 满足的，满意的 vt. 使满意","collocation":"the content of the book 书籍内容；be content with simple life 满足简朴生活","movie":"《阿甘正传》He is content with quiet and simple days.","sentence":"I am content with what I have now."},
+    {"word":"context","phonetic":"[ˈkɒntekst]","meaning":"n. 上下文，语境；背景，环境","collocation":"understand by context 根据语境理解；social context 社会背景","movie":"《十二怒汉》You need to know the whole context to judge the case.","sentence":"Guess the word’s meaning from the context."},
+    {"word":"continual","phonetic":"[kənˈtɪnjuəl]","meaning":"adj. 不断的","collocation":"continual noise 持续噪音；continual trouble 接连不断的麻烦","movie":"《当幸福来敲门》He faced continual difficulties every single day.","sentence":"The continual rain ruined our travel plan."},
+    {"word":"continuous","phonetic":"[kənˈtɪnjuəs]","meaning":"adj. 不断的","collocation":"continuous development 持续发展；continuous rain 连绵大雨","movie":"《星际穿越》The continuous journey took years to finish.","sentence":"The factory keeps continuous production day and night."},
+    {"word":"contract","phonetic":"[ˈkɒntrækt]","meaning":"n.合同 v. 订合同；（使）收缩；感染疾病","collocation":"sign a contract 签合同；muscle contract 肌肉收缩","movie":"《华尔街》He broke the contract to get more profit.","sentence":"We signed a one-year work contract."},
+    {"word":"contrary","phonetic":"[ˈkɒntrəri]","meaning":"n. 相反 adj./adv. 相反的（地）","collocation":"on the contrary 恰恰相反；contrary opinion 相反观点","movie":"《傲慢与偏见》On the contrary, I quite like his personality.","sentence":"His idea is contrary to mine."},
+    {"word":"contrast","phonetic":"[ˈkɒntrɑ:st]","meaning":"n. 相比，对照 v.（使）成对比/对照","collocation":"sharp contrast 鲜明对比；contrast A and B 对比A与B","movie":"《绿皮书》There is a huge contrast between their lives.","sentence":"The black coat forms a contrast with white snow."},
+    {"word":"convey","phonetic":"[kənˈveɪ]","meaning":"vt.运送，传送；传递；传达,表达","collocation":"convey feelings 传递情感；convey goods 运送货物","movie":"《爱在黎明破晓前》Words can’t convey all my love for you.","sentence":"This letter conveys my thanks to you."},
+    {"word":"convince","phonetic":"[kənˈvɪns]","meaning":"vt. 使确信；说服","collocation":"convince sb of sth 使某人相信某事；convince sb to do 说服某人做","movie":"《肖申克的救赎》He convinced himself that freedom was waiting ahead.","sentence":"I tried to convince him to change his mind."},
+    {"word":"convincing","phonetic":"[kənˈvɪnsɪŋ]","meaning":"adj. 有说服力的","collocation":"convincing evidence 有力证据；convincing speech 有说服力的演讲","movie":"《十二怒汉》His logical words are very convincing.","sentence":"She gave a convincing explanation for being late."},
+    {"word":"crisis","phonetic":"[ˈkraɪsɪs]","meaning":"n. 危机；决定性时刻；转折点","collocation":"economic crisis 经济危机；face a crisis 面对危机","movie":"《当幸福来敲门》He met a financial crisis but never gave up.","sentence":"The company is going through a serious crisis now."},
+    {"word":"critical","phonetic":"[ˈkrɪtɪkl]","meaning":"adj. 批评的；危急的；至关重要的","collocation":"critical moment 关键时刻；critical to success 对成功至关重要","movie":"《星际穿越》This critical choice decides humanity’s future.","sentence":"Water is critical for all living things."},
+    {"word":"criticism","phonetic":"[ˈkrɪtɪsɪzəm]","meaning":"n. 批评","collocation":"accept criticism 接受批评；public criticism 公众批评","movie":"《死亡诗社》The teacher ignored unfair criticism from the school.","sentence":"We should take useful criticism calmly."},
+    {"word":"cultivate","phonetic":"[ˈkʌltɪveɪt]","meaning":"vt. 耕作；栽培，培养","collocation":"cultivate good habits 培养好习惯；cultivate crops 种植庄稼","movie":"《心灵奇旅》Cultivate your own love for life.","sentence":"Parents cultivate children’s reading interest early."},
+    {"word":"curiosity","phonetic":"[ˌkjʊəriˈɒsəti]","meaning":"n. 好奇心","collocation":"out of curiosity 出于好奇；arouse curiosity 激发好奇心","movie":"《哈利波特》Curiosity led Harry to find the secret room.","sentence":"Children’s curiosity drives them to explore the world."},
+    {"word":"current","phonetic":"[ˈkʌrənt]","meaning":"adj. 现时的；通行的 n.流（空气/水/电）","collocation":"current situation 当前形势；electric current 电流","movie":"《华尔街》The current market is full of risks.","sentence":"We need to understand the current policy clearly."},
+    {"word":"curriculum","phonetic":"[kəˈrɪkjələm]","meaning":"n. 课程","collocation":"school curriculum 学校课程；design curriculum 设计课程","movie":"《死亡诗社》Poetry is an important part of our curriculum.","sentence":"The school updated its curriculum this term."},
+    {"word":"decisive","phonetic":"[dɪˈsaɪsɪv]","meaning":"adj.决定性的","collocation":"decisive battle 决定性战役；decisive action 果断行动","movie":"《肖申克的救赎》That night was a decisive moment for Andy.","sentence":"This match is decisive for our final ranking."},
+    {"word":"declaration","phonetic":"[ˌdekləˈreɪʃn]","meaning":"n. 宣布；宣言","collocation":"declaration of war 宣战；official declaration 官方声明","movie":"《独立宣言》The great declaration changed the country’s fate.","sentence":"The president made a public declaration yesterday."},
+    {"word":"declare","phonetic":"[dɪˈkleə(r)]","meaning":"vt. 宣布；声明","collocation":"declare war 宣战；declare one’s opinion 表明观点","movie":"《泰坦尼克号》I declare that I will never leave you.","sentence":"He declared he would take full responsibility."},
+    {"word":"decline","phonetic":"[dɪˈklaɪn]","meaning":"v. 拒绝，谢绝；下降 n. 下降；减少","collocation":"decline an invitation 谢绝邀请；economic decline 经济衰退","movie":"《了不起的盖茨比》His luck began to decline after the party.","sentence":"The number of birds declined sharply this year."},
+    {"word":"decorate","phonetic":"[ˈdekəreɪt]","meaning":"v. 装饰，装潢","collocation":"decorate the room 装饰房间；decorate for festivals 节日布置","movie":"《小鬼当家》They decorated the house with Christmas lights.","sentence":"We decorate the classroom before New Year."},
+    {"word":"defend","phonetic":"[dɪˈfend]","meaning":"vt. 防御；保卫；为…辩护","collocation":"defend the country 保卫国家；defend one’s idea 为观点辩护","movie":"《哈利波特》Harry tried his best to defend his friends.","sentence":"Lawyers defend their clients in court."},
+    {"word":"defensive","phonetic":"[dɪˈfensɪv]","meaning":"adj. 防御的；保卫的；辩护的","collocation":"defensive attitude 戒备态度；defensive measures 防御措施","movie":"《教父》He kept a defensive look when facing strangers.","sentence":"The army took defensive positions along the river."},
+    {"word":"define","phonetic":"[dɪˈfaɪn]","meaning":"vt.给…下定义；使明确；规定","collocation":"define a word 给单词下定义；define the rules 制定规则","movie":"《美丽心灵》He tried to define a new math rule.","sentence":"We need to clearly define our goals first."},
+    {"word":"definite","phonetic":"[ˈdefɪnət]","meaning":"adj. 明确的；确定的","collocation":"definite answer 明确答复；definite plan 确定方案","movie":"《泰坦尼克号》I have a definite wish to stay with you.","sentence":"Give me a definite time for your arrival."},
+    {"word":"definition","phonetic":"[ˌdefɪˈnɪʃn]","meaning":"n. 定义","collocation":"the definition of success 成功的定义；word definition 单词释义","movie":"《心灵捕手》Everyone has their own definition of happiness.","sentence":"Check the definition in the dictionary."},
+    {"word":"delete","phonetic":"[dɪˈli:t]","meaning":"vt.擦去；删除","collocation":"delete files 删除文件；delete wrong words 删掉错字","movie":"《楚门的世界》The director tried to delete all his strange thoughts.","sentence":"Please delete the useless information from the report."},
+    {"word":"delicate","phonetic":"[ˈdelɪkət]","meaning":"adj.纤细的；雅致的；易碎的","collocation":"delicate glass 易碎玻璃杯；delicate taste 细腻口感","movie":"《泰坦尼克号》Her delicate face impressed Jack deeply.","sentence":"Handle the antique with delicate care."},
+    {"word":"democracy","phonetic":"[dɪˈmɒkrəsi]","meaning":"n. 民主","collocation":"social democracy 社会民主；value democracy 珍视民主","movie":"《十二怒汉》The jury system stands for democracy.","sentence":"The country develops democracy step by step."},
+    {"word":"demonstrate","phonetic":"[ˈdemənstreɪt]","meaning":"vt. 论证；实验说明 vi.示范；示威游行","collocation":"demonstrate a skill 演示技能；demonstrate a theory 论证理论","movie":"《心灵捕手》He demonstrated his math talent in front of teachers.","sentence":"The teacher demonstrated how to use the machine."},
+    {"word":"description","phonetic":"[dɪˈskrɪpʃn]","meaning":"n. 描述；形容","collocation":"detailed description 详细描述；vivid description 生动描绘","movie":"《泰坦尼克号》His description of the sea was beautiful.","sentence":"Her description of the trip made us want to go."},
+    {"word":"desert","phonetic":"[ˈdezət]","meaning":"n. 沙漠 vt. 抛弃，遗弃","collocation":"desert island 荒岛；desert one’s family 抛弃家人","movie":"《荒野生存》He lived alone in the desert for months.","sentence":"No one should desert their responsibilities."},
+    {"word":"deserve","phonetic":"[dɪˈzɜ:v]","meaning":"vt. 应受；应得；值得","collocation":"deserve praise 值得表扬；deserve punishment 理应受罚","movie":"《肖申克的救赎》Every man deserves freedom.","sentence":"You deserve all the success you get."},
+    {"word":"desirable","phonetic":"[dɪˈzaɪərəbl]","meaning":"adj. 值得要的；合意的","collocation":"desirable job 理想工作；desirable partner 理想伴侣","movie":"《傲慢与偏见》A gentle heart is the most desirable quality.","sentence":"This quiet town is a desirable place to live."},
+    {"word":"despair","phonetic":"[dɪˈspeə(r)]","meaning":"n/vi. 绝望","collocation":"fall into despair 陷入绝望；despair of success 对成功失去希望","movie":"《肖申克的救赎》Don’t despair, hope is still alive.","sentence":"He fell into despair after losing everything."},
+    {"word":"desperate","phonetic":"[ˈdespərət]","meaning":"adj. 不顾一切的；绝望的；很渴望的","collocation":"desperate situation 绝境；desperate for help 极度渴望帮助","movie":"《当幸福来敲门》He was desperate to get the sales job.","sentence":"The trapped miners were desperate for rescue."},
+    {"word":"destruction","phonetic":"[dɪˈstrʌkʃn]","meaning":"n. 破坏；毁灭","collocation":"environmental destruction 环境破坏；the destruction of war 战争的毁灭","movie":"《星际穿越》The storm brought great destruction to the farmland.","sentence":"Pollution leads to the slow destruction of nature."},
+    {"word":"detect","phonetic":"[dɪˈtekt]","meaning":"vt. 发现，察觉","collocation":"detect mistakes 查出错误；detect danger 察觉危险","movie":"《碟中谍》The machine can detect hidden cameras.","sentence":"The doctor detected early signs of illness."},
+    {"word":"dignity","phonetic":"[ˈdɪgnəti]","meaning":"n. 尊严","collocation":"protect human dignity 维护人的尊严；lose dignity 失去尊严","movie":"《绿皮书》Every man has his own dignity no matter his skin color.","sentence":"We should defend our dignity bravely."},
+    {"word":"disapproval","phonetic":"[ˌdɪsəˈpru:vl]","meaning":"n. 不赞成；不批准","collocation":"show disapproval 表示反对；public disapproval 公众反对","movie":"《死亡诗社》The headmaster expressed strong disapproval of our activities.","sentence":"His silence meant disapproval of my plan."},
+    {"word":"disastrous","phonetic":"[dɪˈzɑ:strəs]","meaning":"adj. 灾难性的","collocation":"disastrous result 灾难性后果；disastrous flood 特大洪水","movie":"《星际穿越》The sandstorm had a disastrous influence on crops.","sentence":"A small mistake caused a disastrous accident."},
+    {"word":"discipline","phonetic":"[ˈdɪsəplɪn]","meaning":"n.纪律；惩罚 vt.训练；惩罚","collocation":"school discipline 校规；discipline oneself 自律","movie":"《死亡诗社》Good discipline helps us learn better.","sentence":"You need strict self-discipline to keep studying."},
+    {"word":"discount","phonetic":"[ˈdɪskaʊnt]","meaning":"n. 折扣 v. 打折","collocation":"get a discount 享受折扣；discount price 折扣价","movie":"《老友记》The shop gave us a big discount today.","sentence":"All clothes have a 20% discount this week."},
+    {"word":"discourage","phonetic":"[dɪsˈkʌrɪdʒ]","meaning":"vt. 阻止；使泄气，使灰心","collocation":"discourage sb from giving up 劝阻某人放弃；feel discouraged 感到灰心","movie":"《当幸福来敲门》Don’t let failure discourage you.","sentence":"Bad test scores discouraged the young student."},
+    {"word":"dismiss","phonetic":"[dɪsˈmɪs]","meaning":"vt. 解散；解雇；不再考虑 vi.解散","collocation":"dismiss employees 解雇员工；dismiss the idea 打消念头","movie":"《肖申克的救赎》The warden dismissed Andy’s request coldly.","sentence":"The teacher dismissed the class ten minutes early."},
+    {"word":"distant","phonetic":"[ˈdɪstənt]","meaning":"adj.远的；疏远的","collocation":"distant star 遥远星球；distant relationship 疏远的关系","movie":"《星际穿越》His family was far away in a distant planet.","sentence":"We live in distant cities now."},
+    {"word":"distinct","phonetic":"[dɪˈstɪŋkt]","meaning":"adj. 有区别的，不同的；明显的","collocation":"distinct difference 明显差异；distinct styles 截然不同的风格","movie":"《傲慢与偏见》The two sisters have distinct personalities.","sentence":"There is a distinct change in his attitude."},
+    {"word":"distinguish","phonetic":"[dɪˈstɪŋgwɪʃ]","meaning":"vt. 区别；使杰出（~oneself）","collocation":"distinguish right from wrong 分辨是非；distinguish oneself 脱颖而出","movie":"《哈利波特》He distinguished himself in magic classes.","sentence":"It’s hard to distinguish the two twins."},
+    {"word":"distinguished","phonetic":"[dɪˈstɪŋgwɪʃt]","meaning":"adj. 卓越的，杰出的","collocation":"distinguished scientist 杰出科学家；distinguished guest 贵宾","movie":"《美丽心灵》He became a distinguished mathematician later.","sentence":"Many distinguished scholars attended the meeting."},
+    {"word":"divorce","phonetic":"[dɪ'vɔ:s]","meaning":"n/vi. 离婚 vt. 判离婚；与…离婚","collocation":"divorce rate 离婚率；divorce one’s spouse 与配偶离婚","movie":"《爱乐之城》Their dreams finally divorced them from each other.","sentence":"The couple decided to divorce after years of quarrels."},
+    {"word":"domestic","phonetic":"[dəˈmestɪk]","meaning":"adj. 家庭的；驯养的；国内的","collocation":"domestic life 家庭生活；domestic market 国内市场","movie":"《绿皮书》He was tired of boring domestic work at first.","sentence":"Domestic demand drives local economy."},
+    {"word":"dominant","phonetic":"[ˈdɒmɪnənt]","meaning":"adj.占优势的；支配的","collocation":"dominant position 主导地位；dominant culture 主流文化","movie":"《教父》He held a dominant power in the whole city.","sentence":"She has a dominant voice in team decisions."},
+    {"word":"dominate","phonetic":"[ˈdɒmɪneɪt]","meaning":"v. 支配；控制 vi. 占优势；处于支配地位","collocation":"dominate the market 垄断市场；dominate one’s mind 左右思想","movie":"《华尔街》Money seems to dominate everyone’s mind there.","sentence":"The tall building dominates the whole street."},
+    {"word":"donate","phonetic":"[dəʊˈneɪt]","meaning":"vt. 捐赠","collocation":"donate money 捐款；donate books 捐赠书籍","movie":"《当幸福来敲门》He donated clothes to poor children.","sentence":"Many citizens donate to help homeless people."},
+    {"word":"dramatic","phonetic":"[drəˈmætɪk]","meaning":"adj. 戏剧性的；给人印象深刻的","collocation":"dramatic change 巨变；dramatic scene 戏剧性场面","movie":"《泰坦尼克号》The dramatic ending shocked all audiences.","sentence":"There was a dramatic fall in temperature last night."},
+    {"word":"ecology","phonetic":"[iˈkɒlədʒi]","meaning":"n. 生态（学）","collocation":"protect ecology 保护生态；study ecology 学习生态学","movie":"《星际穿越》Human activities destroyed the earth’s ecology.","sentence":"We must keep the ecology balanced."},
+    {"word":"ecosystem","phonetic":"[ˈi:kəʊsɪstəm]","meaning":"n.生态系（统）","collocation":"natural ecosystem 自然生态系统；balance the ecosystem 平衡生态系统","movie":"《机器人总动员》The earth’s ecosystem was completely broken.","sentence":"Every animal plays a role in the ecosystem."},
+    {"word":"elegant","phonetic":"[ˈelɪgənt]","meaning":"adj.优雅的；典雅的","collocation":"elegant dress 优雅长裙；elegant manner 优雅举止","movie":"《泰坦尼克号》Rose looked elegant in the formal dress.","sentence":"Her handwriting is elegant and clear."},
+    {"word":"element","phonetic":"[ˈelɪmənt]","meaning":"n. 元素；成分；要素","collocation":"key element 关键要素；chemical element 化学元素","movie":"《美丽心灵》Trust is an important element of love.","sentence":"Hard work is a vital element of success."},
+    {"word":"elementary","phonetic":"[ˌelɪˈmentri]","meaning":"adj. 初级的；基本的","collocation":"elementary school 小学；elementary knowledge 基础知识","movie":"《心灵捕手》He mastered elementary math at a young age.","sentence":"The book teaches elementary English grammar."},
+    {"word":"eliminate","phonetic":"[ɪˈlɪmɪneɪt]","meaning":"vt. 消除；淘汰","collocation":"eliminate poverty 消除贫困；eliminate competitors 淘汰对手","movie":"《摔跤吧爸爸》Only the best athletes can eliminate others.","sentence":"Exercise can eliminate tiredness quickly."},
+    {"word":"embarrass","phonetic":"[ɪmˈbærəs]","meaning":"vt.使尴尬；使为难","collocation":"embarrass sb in public 当众让某人难堪；feel embarrassed 感到尴尬","movie":"《老友记》His silly words embarrassed Rachel.","sentence":"I was embarrassed to speak in front of strangers."},
+    {"word":"emerge","phonetic":"[iˈmɜ:dʒ]","meaning":"vi. 出现；问题显露","collocation":"emerge from water 从水中浮现；new problems emerge 新问题出现","movie":"《泰坦尼克号》The sun emerged from the sea at dawn.","sentence":"New facts emerged after further investigation."},
+    {"word":"emergence","phonetic":"[ɪ'mɜ:dʒəns]","meaning":"n. 出现","collocation":"the emergence of new technology 新技术的出现；the emergence of hope 希望的浮现","movie":"《肖申克的救赎》The emergence of the tunnel brought freedom.","sentence":"People welcomed the emergence of the new policy."},
+    {"word":"emergency","phonetic":"[iˈmɜ:dʒənsi]","meaning":"n. 紧急情况；急诊","collocation":"emergency room 急诊室；deal with emergency 处理紧急事件","movie":"《泰坦尼克号》The ship sent emergency signals for help.","sentence":"Call 120 in case of emergency."},
+    {"word":"emotion","phonetic":"[ɪˈməʊʃn]","meaning":"n. 情感；激动","collocation":"strong emotion 强烈情感；control one’s emotion 控制情绪","movie":"《爱在黎明破晓前》All kinds of emotions filled their hearts.","sentence":"Music can arouse deep emotion in people."},
+    {"word":"emphasis","phonetic":"[ˈemfəsɪs]","meaning":"n. 强调；重点","collocation":"put emphasis on education 重视教育；main emphasis 核心重点","movie":"《死亡诗社》The teacher put emphasis on true feelings in poetry.","sentence":"This course puts emphasis on practical skills."},
+    {"word":"encounter","phonetic":"[ɪnˈkaʊntə(r)]","meaning":"vt. 偶遇；遭到 n.邂逅，遭遇","collocation":"encounter difficulties 遭遇困难；a lucky encounter 幸运邂逅","movie":"《泰坦尼克号》Their encounter changed both of their lives.","sentence":"I encountered an old friend on the street today."},
+    {"word":"endurance","phonetic":"[ɪnˈdjʊərəns]","meaning":"n.持久力；忍耐力","collocation":"physical endurance 身体耐力；mental endurance 心理承受力","movie":"《阿甘正传》His long-distance running shows amazing endurance.","sentence":"Long-distance sports test your endurance."},
+    {"word":"endure","phonetic":"[ɪnˈdjʊə(r)]","meaning":"vt. 忍受痛苦 vi. 持久；忍耐","collocation":"endure hardship 忍受苦难；endure for years 持续多年","movie":"《肖申克的救赎》Andy endured unfair treatment for 19 years.","sentence":"We endured heavy rain during the whole trip."},
+    {"word":"engage","phonetic":"[ɪnˈgeɪdʒ]","meaning":"vt. 使参与；订婚；吸引；占用时间精力","collocation":"engage in study 投入学习；engage with friends 与朋友交往","movie":"《爱乐之城》They engaged in their dreams separately.","sentence":"He engages in volunteer work every weekend."},
+    {"word":"enhance","phonetic":"[ɪnˈhɑ:ns]","meaning":"vt. 增加，增强","collocation":"enhance ability 提升能力；enhance efficiency 提高效率","movie":"《心灵奇旅》Music enhances the beauty of ordinary life.","sentence":"Reading enhances your writing skills."},
+    {"word":"enormous","phonetic":"[ɪˈnɔ:məs]","meaning":"adj. 巨大的","collocation":"enormous pressure 巨大压力；enormous wealth 巨额财富","movie":"《泰坦尼克号》The ship carried an enormous number of passengers.","sentence":"The project costs an enormous amount of money."},
+    {"word":"enthusiasm","phonetic":"[ɪnˈθju:ziæzəm]","meaning":"n. 热情；热心","collocation":"full of enthusiasm 充满热情；lose enthusiasm 失去热情","movie":"《死亡诗社》The students read poems with great enthusiasm.","sentence":"She has great enthusiasm for painting."},
+    {"word":"entire","phonetic":"[ɪnˈtaɪə(r)]","meaning":"adj.整个的，全部的","collocation":"the entire world 全世界；entire life 一生","movie":"《肖申克的救赎》He spent his entire life chasing freedom.","sentence":"I spent the entire afternoon finishing homework."},
+    {"word":"entitle","phonetic":"[ɪnˈtaɪtl]","meaning":"vt. 给…权利/资格；冠名","collocation":"entitle sb to do sth 赋予某人做某事的权利；entitle the book 给书籍命名","movie":"《绿皮书》Your courage entitles you to respect.","sentence":"This ticket entitles you to free entry."},
+    {"word":"envious","phonetic":"[ˈenviəs]","meaning":"adj. 羡慕的，妒忌的","collocation":"be envious of others’ success 羡慕他人成功","movie":"《哈利波特》Some students were envious of Harry’s magic power.","sentence":"I’m not envious of his rich life."},
+    {"word":"envy","phonetic":"[ˈenvi]","meaning":"vt. 羡慕，妒忌 n. 羡慕/嫉妒的对象","collocation":"out of envy 出于嫉妒；envy sb’s luck 羡慕某人好运","movie":"《了不起的盖茨比》Many people envied his luxurious life.","sentence":"I envy your chance to travel abroad."},
+    {"word":"equality","phonetic":"[iˈkwɒləti]","meaning":"n. 相等；平等","collocation":"gender equality 性别平等；fight for equality 为平等抗争","movie":"《绿皮书》We fight for equality of all races.","sentence":"All people should enjoy equality before the law."},
+    {"word":"equip","phonetic":"[iˈkwip]","meaning":"vt. 配备；使有准备","collocation":"equip the lab with tools 为实验室配备工具；equip oneself with knowledge 储备知识","movie":"《火星救援》The spaceship is fully equipped for survival.","sentence":"The school equips each classroom with computers."},
+    {"word":"essential","phonetic":"[ɪˈsenʃl]","meaning":"adj. 必不可少的；实质的","collocation":"essential skills 必备技能；essential food 必需品","movie":"《星际穿越》Water and air are essential to human life.","sentence":"Sleep is essential for your health."},
+    {"word":"establish","phonetic":"[ɪˈstæblɪʃ]","meaning":"vt. 建立；使立足；确立","collocation":"establish a company 创办公司；establish rules 制定规则","movie":"《肖申克的救赎》Andy established a new life in the small town.","sentence":"The school was established one hundred years ago."},
+    {"word":"estimate","phonetic":"[ˈestɪmət]","meaning":"n/v. 估计，评价；鉴定","collocation":"estimate the cost 估算成本；rough estimate 粗略预估","movie":"《泰坦尼克号》Experts estimated the ship would never sink.","sentence":"We estimate the work will take three days."},
+    {"word":"eventually","phonetic":"[ɪˈventʃuəli]","meaning":"adv. 最终","collocation":"eventually succeed 最终成功；eventually arrive 终于抵达","movie":"《肖申克的救赎》Andy eventually escaped the prison after 19 years.","sentence":"He kept trying and eventually won the game."},
+    {"word":"evidence","phonetic":"[ˈevɪdəns]","meaning":"n.证据","collocation":"hard evidence 确凿证据；provide evidence 提供证据","movie":"《十二怒汉》There was no clear evidence to prove the boy guilty.","sentence":"The police found new evidence of the crime."},
+    {"word":"evident","phonetic":"[ˈevɪdənt]","meaning":"adj. 明显的；明白的","collocation":"it is evident that 显然…；evident change 明显变化","movie":"《当幸福来敲门》It was evident that he loved his son deeply.","sentence":"Her sadness was evident in her eyes."},
+    {"word":"evolution","phonetic":"[ˌi:vəˈlu:ʃn]","meaning":"n. 生物进化；缓慢发展","collocation":"the evolution of human beings 人类进化；social evolution 社会发展","movie":"《2001太空漫游》The film shows the evolution of human intelligence.","sentence":"Scientists study the evolution of ancient animals."},
+    {"word":"evolve","phonetic":"[iˈvɒlv]","meaning":"v. (使)进化；缓慢发展","collocation":"evolve from ancient species 从古老物种进化而来；evolve new ideas 逐步形成新观念","movie":"《星际穿越》Human civilization will evolve with time.","sentence":"Plants evolve to fit different environments."},
+    {"word":"exact","phonetic":"[ɪgˈzækt]","meaning":"adj.精确的；确切的","collocation":"exact time 准确时间；exact answer 标准答案","movie":"《火星救援》We need the exact data to plant crops.","sentence":"Tell me the exact address of the hotel."},
+    {"word":"exclude","phonetic":"[ɪkˈsklu:d]","meaning":"vt. 排除，不包括；排斥在外","collocation":"exclude irrelevant factors 排除无关因素；exclude sb from the group 将某人排除出团体","movie":"《绿皮书》Black people were excluded from many public places back then.","sentence":"We excluded rainy days from our travel plan."},
+    {"word":"exhaust","phonetic":"[ɪgˈzɔ:st]","meaning":"vt. 耗尽；使筋疲力尽","collocation":"exhaust energy 耗尽精力；feel exhausted 精疲力竭","movie":"《当幸福来敲门》He was exhausted after working all day.","sentence":"The long walk exhausted all my strength."},
+     {"word":"expand","phonetic":"[ɪkˈspænd]","meaning":"vt. 扩大，展开；（使）膨胀","collocation":"expand business 拓展业务；expand knowledge 扩充学识","movie":"《华尔街》The boss planned to expand the company across the whole country.","sentence":"Metals expand when heated."},
+    {"word":"expansion","phonetic":"[ɪkˈspænʃn]","meaning":"n. 扩大；膨胀","collocation":"economic expansion 经济扩张；thermal expansion 热膨胀","movie":"《星际穿越》The expansion of the universe never stops.","sentence":"The factory’s expansion created more jobs."},
+    {"word":"explode","phonetic":"[ɪkˈspləʊd]","meaning":"v. (使)爆炸，爆发；人口激增","collocation":"explode with anger 勃然大怒；population explode 人口暴涨","movie":"《泰坦尼克号》The boiler exploded and destroyed half the ship.","sentence":"The crowd exploded in cheers when the hero appeared."},
+    {"word":"exploit","phonetic":"[ɪkˈsplɔɪt]","meaning":"vt. 开发，利用；剥削 n. 英勇事迹","collocation":"exploit resources 开发资源；exploit one’s talent 发挥天赋","movie":"《荒野生存》He wanted to exploit the beauty of nature alone.","sentence":"We should exploit solar energy to protect the earth."},
+    {"word":"explosion","phonetic":"[ɪkˈspləʊʒn]","meaning":"n. 爆炸，爆发；激增","collocation":"an explosion of laughter 哄堂大笑；population explosion 人口爆炸","movie":"《碟中谍》The huge explosion destroyed the whole building.","sentence":"There has been an explosion of online shops in recent years."},
+    {"word":"explore","phonetic":"[ɪkˈsplɔ:(r)]","meaning":"vt. 探索；探险","collocation":"explore space 探索太空；explore new methods 探究新方法","movie":"《火星救援》Astronauts explore the surface of Mars.","sentence":"Children love to explore unknown things around them."},
+    {"word":"exploration","phonetic":"[ˌekspləˈreɪʃn]","meaning":"n. 探索","collocation":"space exploration 太空探索；scientific exploration 科学探究","movie":"《2001太空漫游》The story is about human space exploration.","sentence":"The exploration of deep sea costs huge money."},
+    {"word":"export","phonetic":"[ˈekspɔ:t]","meaning":"n/v. 出口；输出","collocation":"export goods 出口商品；export culture 文化输出","movie":"《华尔街》The factory exports products to Europe every year.","sentence":"China exports many electronic products worldwide."},
+    {"word":"exposure","phonetic":"[ɪkˈspəʊʒə(r)]","meaning":"n. 接触；暴露","collocation":"exposure to sunlight 日晒；exposure to foreign culture 接触外来文化","movie":"《肖申克的救赎》Long exposure to damp damaged the cell walls.","sentence":"Too much exposure to screen hurts your eyes."},
+    {"word":"extend","phonetic":"[ɪkˈstend]","meaning":"v. 延伸，延长","collocation":"extend deadline 延长截止日期；extend a hand 伸出援手","movie":"《泰坦尼克号》Jack extended his hand to pull Rose back.","sentence":"The school decided to extend the holiday by two days."},
+    {"word":"extension","phonetic":"[ɪkˈstenʃn]","meaning":"n. 延伸，延长；电话分机","collocation":"road extension 道路扩建；telephone extension 分机号","movie":"《老友记》Can you transfer me to the extension of the manager?","sentence":"The extension of the subway brings convenience to citizens."},
+    {"word":"extensive","phonetic":"[ɪkˈstensɪv]","meaning":"adj. 广泛的；广阔的","collocation":"extensive reading 泛读；extensive influence 广泛影响","movie":"《美丽心灵》He did extensive research on mathematical theories.","sentence":"This book offers extensive knowledge of history."},
+    {"word":"external","phonetic":"[ɪkˈstɜ:nl]","meaning":"adj. 外部的；外界的","collocation":"external environment 外部环境；external pressure 外界压力","movie":"《星际穿越》External forces destroyed the earth’s crops.","sentence":"The medicine is only for external use."},
+    {"word":"extinct","phonetic":"[ɪkˈstɪŋkt]","meaning":"adj. 灭绝的","collocation":"extinct animals 灭绝动物；become extinct 灭绝","movie":"《侏罗纪公园》Dinosaurs became extinct millions of years ago.","sentence":"Many wild animals are nearly extinct now."},
+    {"word":"extraordinary","phonetic":"[ɪkˈstrɔ:dnri]","meaning":"adj. 不平常的，特别的","collocation":"extraordinary talent 非凡天赋；extraordinary experience 奇特经历","movie":"《阿甘正传》Forrest has an extraordinary life story.","sentence":"Her memory ability is extraordinary."},
+    {"word":"extreme","phonetic":"[ɪkˈstri:m]","meaning":"adj. 极端的；过分的 n.极端","collocation":"extreme weather 极端天气；go to extremes 走极端","movie":"《荒野生存》He experienced extreme cold in the wild.","sentence":"We should avoid extreme opinions."},
+    {"word":"faith","phonetic":"[feɪθ]","meaning":"n. 信任；信心；信念","collocation":"have faith in sb 信任某人；lose faith 失去信念","movie":"《肖申克的救赎》Faith is what kept Andy alive in prison.","sentence":"I have full faith in your ability."},
+    {"word":"faithful","phonetic":"[ˈfeɪθfl]","meaning":"adj. 忠实的，忠诚的","collocation":"faithful friend 挚友；faithful dog 忠犬","movie":"《忠犬八公》Hachi is the most faithful dog in the world.","sentence":"She remains faithful to her original dream."},
+    {"word":"fake","phonetic":"[feɪk]","meaning":"n. 假货，赝品 adj. 假冒的 vt. 伪造","collocation":"fake money 假钞；fake smile 假笑","movie":"《猫鼠游戏》He could fake any identity easily.","sentence":"This painting is a fake, not the original."},
+    {"word":"fantastic","phonetic":"[fænˈtæstɪk]","meaning":"adj.幻想的；奇异的；了不起的","collocation":"fantastic scenery 绝美风景；fantastic achievement 卓越成就","movie":"《哈利波特》The magic world is absolutely fantastic.","sentence":"We had a fantastic trip last summer."},
+    {"word":"fascinate","phonetic":"[ˈfæsɪneɪt]","meaning":"vt.迷住；强烈吸引","collocation":"be fascinated by 被…深深吸引","movie":"《泰坦尼克号》Rose was fascinated by Jack’s free lifestyle.","sentence":"Children are fascinated by cartoon characters."},
+    {"word":"favorable","phonetic":"[ˈfeɪvərəbl]","meaning":"adj. 有利的","collocation":"favorable condition 有利条件；favorable comment 好评","movie":"《当幸福来敲门》The interviewer gave him a favorable impression.","sentence":"The weather is favorable for hiking today."},
+    {"word":"feasible","phonetic":"[ˈfi:zəbl]","meaning":"adj. 可行的；行得通的","collocation":"feasible plan 可行方案；economically feasible 经济可行","movie":"《火星救援》The rescue plan is feasible after calculation.","sentence":"We need a feasible way to solve the problem."},
+    {"word":"feature","phonetic":"[ˈfi:tʃə(r)]","meaning":"n. 特写；特征 vt. 以…为特色","collocation":"main feature 主要特征；feature film 故事片","movie":"《爱乐之城》The movie features beautiful jazz music.","sentence":"Big eyes are her best feature."},
+    {"word":"feedback","phonetic":"[ˈfi:dbæk]","meaning":"n. 反馈","collocation":"customer feedback 用户反馈；receive feedback 接收反馈","movie":"《心灵捕手》The professor got positive feedback on his lecture.","sentence":"Teachers need feedback from students to improve lessons."},
+    {"word":"finance","phonetic":"[ˈfaɪnæns]","meaning":"n. 财政,金融,资金 vt. 提供资金","collocation":"personal finance 个人理财；finance a project 资助项目","movie":"《当幸福来敲门》He learned finance to change his poor life.","sentence":"The company will finance our research."},
+    {"word":"financial","phonetic":"[faɪˈnænʃl]","meaning":"adj. 财政的，金融的","collocation":"financial crisis 金融危机；financial support 资金支持","movie":"《华尔街》He works in the financial district of New York.","sentence":"Many families faced financial trouble last year."},
+    {"word":"fixed","phonetic":"[fɪkst]","meaning":"adj.固定的","collocation":"fixed time 固定时间；fixed price 定价","movie":"《肖申克的救赎》The schedule in prison was fixed every day.","sentence":"We have a fixed place for morning reading."},
+    {"word":"flexible","phonetic":"[ˈfleksəbl]","meaning":"adj.易弯曲的；灵活的","collocation":"flexible schedule 弹性时间；flexible policy 灵活政策","movie":"《老友记》Our working time is flexible on weekends.","sentence":"Flexible thinking helps solve hard problems."},
+    {"word":"forceful","phonetic":"[ˈfɔ:sfl]","meaning":"adj. 强有力的；有说服力的","collocation":"forceful speech 铿锵有力的演讲；forceful argument 有说服力的论据","movie":"《永不妥协》Her forceful words won the residents’ trust.","sentence":"He made a forceful request for justice."},
+    {"word":"foresee","phonetic":"[fɔ:ˈsi:]","meaning":"vt. 预见；预知","collocation":"foresee the risk 预见风险；foresee the result 预知结果","movie":"《星际穿越》No one could foresee the sandstorm disaster.","sentence":"I didn’t foresee that he would give up halfway."},
+    {"word":"forgive","phonetic":"[fəˈgɪv]","meaning":"vt. 原谅","collocation":"forgive mistakes 原谅过错；forgive sb for doing sth 原谅某人某事","movie":"《绿皮书》Tony finally chose to forgive the rude waiter.","sentence":"Please forgive me for being late."},
+    {"word":"foundation","phonetic":"[faʊnˈdeɪʃn]","meaning":"n.建立；基础；基金会","collocation":"lay a foundation 打下基础；charity foundation 慈善基金会","movie":"《肖申克的救赎》Hope is the foundation of Andy’s persistence.","sentence":"Hard study lays the foundation for future success."},
+    {"word":"frank","phonetic":"[fræŋk]","meaning":"adj.坦白的；真诚的","collocation":"frank talk 坦诚交谈；to be frank 坦白说","movie":"《十二怒汉》He was frank about his doubt on the case.","sentence":"To be frank, I don’t agree with your idea."},
+    {"word":"frustrate","phonetic":"[frʌˈstreɪt]","meaning":"v. 受挫，挫败；使灰心","collocation":"frustrate one’s plan 阻挠计划；feel frustrated 感到沮丧","movie":"《当幸福来敲门》He was frustrated but never stopped trying.","sentence":"Continuous failures frustrated the young boy."},
+    {"word":"fulfill","phonetic":"[fʊl'fɪl]","meaning":"vt. 履行；实现；满足","collocation":"fulfill a dream 实现梦想；fulfill a promise 履行承诺","movie":"《阿甘正传》Forrest fulfilled his promise to visit Bubba’s family.","sentence":"I will fulfill all the tasks before holiday."},
+    {"word":"function","phonetic":"[ˈfʌŋkʃn]","meaning":"n. 功能；作用 v. 起作用","collocation":"main function 主要功能；function normally 正常运转","movie":"《机器人总动员》The spaceship can function without human control.","sentence":"The heart functions to pump blood through the body."},
+    {"word":"furthermore","phonetic":"[ˌfɜ:ðəˈmɔ:(r)]","meaning":"adv.而且, 此外","collocation":"simple and furthermore cheap 简单而且便宜","movie":"《死亡诗社》Poetry is beautiful; furthermore, it touches souls.","sentence":"The book is interesting, furthermore, it is cheap."},
+    {"word":"generosity","phonetic":"[ˌdʒenəˈrɒsəti]","meaning":"n.慷慨，大方","collocation":"admire one’s generosity 敬佩某人的慷慨","movie":"《寻梦环游记》The old man’s generosity warmed the little boy.","sentence":"Everyone praises her generosity to homeless people."},
+    {"word":"generous","phonetic":"[ˈdʒenərəs]","meaning":"adj. 慷慨的，大方的","collocation":"generous donation 慷慨捐赠；generous to others 待人宽厚","movie":"《当幸福来敲门》Even poor, he was generous to strangers.","sentence":"She is generous with her time to help classmates."},
+    {"word":"genetic","phonetic":"[dʒəˈnetɪk]","meaning":"adj. 基因的，遗传学的","collocation":"genetic factor 遗传因素；genetic disease 遗传病","movie":"《侏罗纪公园》Scientists studied genetic technology to recreate dinosaurs.","sentence":"Eye color is controlled by genetic genes."},
+    {"word":"genuine","phonetic":"[ˈdʒenjuɪn]","meaning":"adj. 真的；真诚的","collocation":"genuine leather 真皮；genuine care 真心关怀","movie":"《泰坦尼克号》Jack’s love for Rose was genuine.","sentence":"This is genuine gold, not a copy."},
+    {"word":"germ","phonetic":"[dʒɜ:m]","meaning":"n. 病菌，细菌","collocation":"kill germ 杀菌；germ spread 病菌传播","movie":"《传染病》We must stop germs from spreading fast.","sentence":"Wash hands to wash away germs."},
+    {"word":"glorious","phonetic":"[ˈglɔ:riəs]","meaning":"adj. 光荣的，辉煌的","collocation":"glorious history 辉煌历史；glorious victory 光荣胜利","movie":"《阿甘正传》His running career was glorious.","sentence":"We won a glorious competition yesterday."},
+    {"word":"glory","phonetic":"[ˈglɔ:ri]","meaning":"n.光荣，荣耀","collocation":"win glory 赢得荣耀；the glory of youth 青春荣光","movie":"《摔跤吧爸爸》The two girls fought for national glory.","sentence":"He devoted his life to the glory of his country."},
+    {"word":"graceful","phonetic":"[ˈgreɪsfl]","meaning":"adj.优美的，优雅的","collocation":"graceful dance 优美舞蹈；graceful movement 优雅动作","movie":"《泰坦尼克号》Rose looked graceful while dancing.","sentence":"The swan made a graceful turn on the lake."},
+    {"word":"grant","phonetic":"[grɑ:nt]","meaning":"vt/n.同意; 授予；授予物","collocation":"grant a request 答应请求；scholarship grant 奖学金","movie":"《肖申克的救赎》The warden refused to grant Andy parole.","sentence":"The school grants money to poor students."},
+    {"word":"gratitude","phonetic":"[ˈgrætɪtju:d]","meaning":"n. 感激之情","collocation":"express gratitude 表达感激；deep gratitude 深深谢意","movie":"《当幸福来敲门》He showed great gratitude to his mentor.","sentence":"I write this letter to show my gratitude."},
+    {"word":"greedy","phonetic":"[ˈgri:di]","meaning":"adj. 贪婪的","collocation":"greedy for money 贪财；greedy for power 贪恋权力","movie":"《华尔街》The boss was too greedy to stop making profits.","sentence":"Don’t be greedy for small gains."},
+    {"word":"guarantee","phonetic":"[ˌgærənˈti:]","meaning":"n/vt. 保证；担保","collocation":"guarantee quality 保证质量；guarantee safety 保障安全","movie":"《肖申克的救赎》No one can guarantee freedom in prison.","sentence":"This shop guarantees to return money if the goods break."},
+    {"word":"guidance","phonetic":"[ˈgaɪdns]","meaning":"n. 指导，指引","collocation":"under one’s guidance 在某人指导下；career guidance 职业指导","movie":"《死亡诗社》The teacher’s guidance changed students’ minds.","sentence":"We need professional guidance to finish the project."},
+    {"word":"guilty","phonetic":"[ˈgɪlti]","meaning":"adj.有罪的；内疚的","collocation":"feel guilty 感到愧疚；guilty of crime 犯有罪行","movie":"《十二怒汉》The boy did not feel guilty of the murder.","sentence":"I feel guilty for forgetting your birthday."},
+    {"word":"hardship","phonetic":"[ˈhɑ:dʃɪp]","meaning":"n.艰难，困苦","collocation":"suffer hardship 历经苦难；overcome hardship 克服艰难","movie":"《当幸福来敲门》He survived countless hardships with his son.","sentence":"Many farmers went through great hardship last winter."},
+    {"word":"harmonious","phonetic":"[hɑ:ˈməʊniəs]","meaning":"adj. 和谐的","collocation":"harmonious family 和睦家庭；harmonious society 和谐社会","movie":"《寻梦环游记》The whole family lived a harmonious life at last.","sentence":"We keep a harmonious relationship with neighbors."},
+    {"word":"harmony","phonetic":"[ˈhɑ:məni]","meaning":"n.和谐","collocation":"live in harmony 和睦共处；in harmony with nature 与自然和谐","movie":"《阿凡达》The Na’vi people live in harmony with forests.","sentence":"Colorful flowers create harmony in the garden."},
+    {"word":"hatred","phonetic":"[ˈheɪtrɪd]","meaning":"n. 仇恨，敌意","collocation":"full of hatred 充满仇恨；deep hatred 深仇大恨","movie":"《绿皮书》Racial hatred separated people for a long time.","sentence":"We should replace hatred with kindness."},
+    {"word":"highlight","phonetic":"[ˈhaɪlaɪt]","meaning":"n.最突出部分 vt.突出，强调","collocation":"highlight key points 划重点；the highlight of the trip 旅途高光","movie":"《爱乐之城》The dancing scene is the highlight of the movie.","sentence":"The report highlights environmental problems."},
+    {"word":"hint","phonetic":"[hɪnt]","meaning":"n/v. 暗示","collocation":"drop a hint 给出暗示；take the hint 领会暗示","movie":"《哈利波特》Hermione gave Harry a quiet hint.","sentence":"She gave me a hint about the exam."},
+    {"word":"horizons","phonetic":"[hə'raɪznz]","meaning":"n. 视野，眼界","collocation":"broaden one’s horizons 开阔眼界；widen horizons 拓宽视野","movie":"《楚门的世界》Going out will open new horizons for you.","sentence":"Travelling broadens our horizons greatly."},
+    {"word":"identification","phonetic":"[aɪˌdentɪfɪˈkeɪʃn]","meaning":"n. 识别；身份证明","collocation":"identity identification 身份识别；quick identification 快速辨认","movie":"《碟中谍》The machine finished facial identification in seconds.","sentence":"You need identification to check in hotel."},
+    {"word":"identify","phonetic":"[aɪˈdentɪfaɪ]","meaning":"vt.认出；鉴定","collocation":"identify the suspect 辨认嫌疑人；identify problems 找出问题","movie":"《十二怒汉》No one could clearly identify the killer.","sentence":"Can you identify this old photo’s person?"},
+    {"word":"identity","phonetic":"[aɪˈdentəti]","meaning":"n. 身份","collocation":"identity card 身份证；sense of identity 身份认同","movie":"《猫鼠游戏》He kept changing his identity to escape police.","sentence":"Everyone should respect their cultural identity."},
+    {"word":"ignorant","phonetic":"[ˈɪgnərənt]","meaning":"adj. 无知的","collocation":"be ignorant of 对…一无所知；ignorant behavior 无知举动","movie":"《绿皮书》Many white people were ignorant of black culture.","sentence":"He is ignorant of basic history knowledge."},
+    {"word":"illegal","phonetic":"[ɪˈli:gl]","meaning":"adj.非法的","collocation":"illegal action 违法行为；illegal trade 非法交易","movie":"《猫鼠游戏》Forging checks is illegal everywhere.","sentence":"It is illegal to drive without a license."},
+    {"word":"illustrate","phonetic":"[ˈɪləstreɪt]","meaning":"vt.举例论证；插图于","collocation":"illustrate with examples 举例说明；illustrate a book 给书籍配图","movie":"《美丽心灵》He used numbers to illustrate his theory.","sentence":"The teacher illustrated the rule with a story."},
+    {"word":"image","phonetic":"[ˈɪmɪdʒ]","meaning":"n. 形象；像","collocation":"public image 公众形象；clear image 清晰影像","movie":"《泰坦尼克号》The image of Rose on the door is classic.","sentence":"The company tries to build a friendly public image."},
+    {"word":"imaginary","phonetic":"[ɪˈmædʒɪnəri]","meaning":"adj. 想象中的；虚构的","collocation":"imaginary friend 幻想玩伴；imaginary world 虚构世界","movie":"《哈利波特》Hogwarts is an imaginary magic school.","sentence":"The dragon in the story is imaginary."},
+    {"word":"imaginative","phonetic":"[ɪˈmædʒɪnətɪv]","meaning":"adj.富有想象力的","collocation":"imaginative writer 富有想象力的作家；imaginative design 创意设计","movie":"《查理和巧克力工厂》The director is highly imaginative.","sentence":"Children are far more imaginative than adults."},
+    {"word":"imitate","phonetic":"[ˈɪmɪteɪt]","meaning":"vt.模仿","collocation":"imitate others’ speech 模仿说话；imitate famous artists 模仿名家","movie":"《猫鼠游戏》He could imitate any adult’s voice.","sentence":"Little kids like to imitate their parents."},
+    {"word":"immigrate","phonetic":"[ˈɪmɪgreɪt]","meaning":"v.移民","collocation":"immigrate to foreign country 移居海外","movie":"《当幸福来敲门》Many people immigrate to America for dreams.","sentence":"His family chose to immigrate to Canada."},
+    {"word":"immoral","phonetic":"[ɪˈmɒrəl]","meaning":"adj.不道德的","collocation":"immoral behavior 不道德行为；immoral trade 不道德交易","movie":"《华尔街》Cheating customers is immoral and illegal.","sentence":"It’s immoral to lie to your best friend."},
+    {"word":"impact","phonetic":"[ˈɪmpækt]","meaning":"n/v. 影响；冲击","collocation":"great impact 巨大影响；environmental impact 环境冲击","movie":"《星际穿越》The sandstorm had a terrible impact on farming.","sentence":"Social media has a big impact on teenagers."},
+    {"word":"implication","phonetic":"[ˌɪmplɪˈkeɪʃn]","meaning":"n. 含意，暗示","collocation":"hidden implication 隐含深意；political implication 政治寓意","movie":"《盗梦空间》Every sentence has a deep implication.","sentence":"I didn’t catch the implication of his words."},
+    {"word":"imply","phonetic":"[ɪmˈplaɪ]","meaning":"vt.暗示","collocation":"imply disagreement 暗示反对；imply support 暗含支持","movie":"《傲慢与偏见》Her silence implied disappointment.","sentence":"His smile implied he agreed with me."},
+    {"word":"import","phonetic":"[ˈɪmpɔ:t]","meaning":"n/vt. 进口；输入","collocation":"import fruit 进口水果；import technology 引进技术","movie":"《华尔街》The shop imports wine from France.","sentence":"We import advanced machines from Germany."},
+    {"word":"incomparable","phonetic":"[ɪnˈkɒmprəbl]","meaning":"adj. 无与伦比的","collocation":"incomparable beauty 绝世美貌；incomparable talent 无双天赋","movie":"《泰坦尼克号》The sunset sea view is incomparable.","sentence":"Her piano skill is incomparable in our school."},
+    {"word":"indirect","phonetic":"[ˌɪndəˈrekt]","meaning":"adj. 间接的","collocation":"indirect influence 间接影响；indirect way 迂回方式","movie":"《傲慢与偏见》He sent an indirect message to express love.","sentence":"We got the news through indirect channels."},
+    {"word":"inevitable","phonetic":"[ɪnˈevɪtəbl]","meaning":"adj.不可避免，必然发生的","collocation":"inevitable result 必然结果；inevitable change 不可避免的变革","movie":"《泰坦尼克号》The ship’s sinking was almost inevitable.","sentence":"Failure is inevitable if you never practice."},
+    {"word":"infer","phonetic":"[ɪnˈfɜ:(r)]","meaning":"vt.推断","collocation":"infer from evidence 根据证据推断；infer the truth 推知真相","movie":"《十二怒汉》We can infer his innocence from the clues.","sentence":"We can infer that he left early."},
+    {"word":"inferior","phonetic":"[ɪnˈfɪəriə(r)]","meaning":"adj.较差的；地位较低的 n.下级,次品","collocation":"inferior quality 劣质；feel inferior 自卑","movie":"《绿皮书》Black people were treated as inferior long ago.","sentence":"Don’t feel inferior to anyone else."},
+    {"word":"influential","phonetic":"[ˌɪnfluˈenʃl]","meaning":"adj.有影响力的","collocation":"influential figure 有影响力人物；influential article 影响力文章","movie":"《死亡诗社》The teacher became an influential guide for students.","sentence":"This writer is highly influential among young people."},
+    {"word":"informal","phonetic":"[ɪnˈfɔ:ml]","meaning":"adj. 非正式的","collocation":"informal talk 闲聊；informal clothes 休闲装","movie":"《老友记》We hold informal parties every weekend.","sentence":"This is an informal meeting without strict rules."},
+    {"word":"informative","phonetic":"[ɪnˈfɔ:mətɪv]","meaning":"adj.提供信息的","collocation":"informative report 详实报道；informative lecture 干货讲座","movie":"《心灵捕手》His math speech was clear and informative.","sentence":"This textbook is very informative for beginners."},
+    {"word":"inhabitant","phonetic":"[ɪnˈhæbɪtənt]","meaning":"n.居民","collocation":"local inhabitant 当地居民；city inhabitant 城市居民","movie":"《阿凡达》The Na’vi are the original inhabitants of Pandora.","sentence":"All inhabitants protect the village forest together."},
+    {"word":"inherit","phonetic":"[ɪnˈherɪt]","meaning":"vt. 继承","collocation":"inherit property 继承财产；inherit good qualities 承袭优良品质","movie":"《哈利波特》Harry inherited his father’s magic wand.","sentence":"She will inherit her grandma’s old house."},
+    {"word":"initial","phonetic":"[ɪˈnɪʃl]","meaning":"adj.开始的，最初的","collocation":"initial stage 初期；initial idea 最初想法","movie":"《肖申克的救赎》His initial plan took many years to finish.","sentence":"My initial plan was much simpler."},
+    {"word":"initiate","phonetic":"[ɪˈnɪʃieɪt]","meaning":"vt. 开始实施；发起","collocation":"initiate a project 启动项目；initiate a discussion 发起讨论","movie":"《永不妥协》She initiated a movement to protect villagers.","sentence":"Our class initiated a reading activity."},
+    {"word":"initiative","phonetic":"[ɪˈnɪʃətɪv]","meaning":"n. 首创精神；主动性","collocation":"take initiative 主动；lack initiative 缺乏主动性","movie":"《当幸福来敲门》He took initiative to seize every interview chance.","sentence":"Good students show great initiative in study."},
+    {"word":"innocent","phonetic":"[ˈɪnəsnt]","meaning":"adj.清白的；天真的","collocation":"innocent child 天真孩童；prove innocent 证明清白","movie":"《十二怒汉》The young boy was actually innocent of murder.","sentence":"Little children are innocent of evil thoughts."},
+    {"word":"innovation","phonetic":"[ˌɪnəˈveɪʃn]","meaning":"n. 创新","collocation":"technological innovation 科技创新；educational innovation 教育革新","movie":"《乔布斯》The film shows his great innovation spirit.","sentence":"Mobile phones bring constant innovation every year."},
+    {"word":"inquire","phonetic":"[ɪn'kwaɪə(r)]","meaning":"v.询问，打听","collocation":"inquire about prices 询问价格；inquire after sb 问候某人","movie":"《泰坦尼克号》Rose inquired about Jack’s past life.","sentence":"I inquired about the train timetable at the station."},
+    {"word":"inspect","phonetic":"[ɪnˈspekt]","meaning":"vt. 检查，视察；检阅","collocation":"inspect goods 检查货物；inspect the factory 视察工厂","movie":"《肖申克的救赎》The warden inspected cells every morning.","sentence":"Teachers inspect homework every morning."},
+    {"word":"inspiration","phonetic":"[ˌɪnspəˈreɪʃn]","meaning":"n.鼓舞，灵感","collocation":"draw inspiration 获取灵感；a source of inspiration 灵感源泉","movie":"《爱乐之城》Mia was his biggest inspiration for music.","sentence":"Nature gives artists endless inspiration."},
+    {"word":"instance","phonetic":"[ˈɪnstəns]","meaning":"n.例子","collocation":"for instance 例如；a typical instance 典型案例","movie":"《阿甘正传》For instance, Forrest never gave up running.","sentence":"Many fruits, for instance apples, grow in north China."},
+    {"word":"instant","phonetic":"[ˈɪnstənt]","meaning":"adj. 立刻的；速食的 n. 瞬间","collocation":"instant coffee 速溶咖啡；instant reply 即时回复","movie":"《泰坦尼克号》At that instant, Jack knew he loved Rose.","sentence":"The medicine gives instant pain relief."},
+    {"word":"instinct","phonetic":"[ˈɪnstɪŋkt]","meaning":"n. 本能；直觉","collocation":"animal instinct 动物本能；trust one’s instinct 相信直觉","movie":"《荒野生存》He relied on his instinct to survive in wild.","sentence":"Birds fly south by natural instinct."},
+    {"word":"instruct","phonetic":"[ɪnˈstrʌkt]","meaning":"vt. 教；指示","collocation":"instruct students 教导学生；instruct sb to do 指示某人做","movie":"《死亡诗社》Mr. Keating instructed us to think freely.","sentence":"The manager instructed us to finish early."},
+    {"word":"instructive","phonetic":"[ɪnˈstrʌktɪv]","meaning":"adj. 有教育意义的","collocation":"instructive movie 有教育意义的电影；instructive story 启发性故事","movie":"《心灵捕手》This math lecture is short but instructive.","sentence":"The trip was fun and instructive for kids."},
+    {"word":"insult","phonetic":"[ɪnˈsʌlt]","meaning":"n/vt. 侮辱","collocation":"take an insult 忍受侮辱；insult sb in public 当众羞辱","movie":"《绿皮书》The waiter tried to insult Dr. Shirley.","sentence":"It’s rude to insult others for no reason."},
+    {"word":"insurance","phonetic":"[ɪnˈʃʊərəns]","meaning":"n. 保险","collocation":"health insurance 医疗保险；car insurance 车险","movie":"《当幸福来敲门》He sold insurance door to door at first.","sentence":"Every driver needs to buy car insurance."},
+    {"word":"insure","phonetic":"[ɪnˈʃʊə(r)]","meaning":"v.给…保险","collocation":"insure property 给财产投保；insure against accident 投保意外险","movie":"《泰坦尼克号》Few passengers insured their luggage.","sentence":"I insured my new bike against theft."},
+    {"word":"intellect","phonetic":"[ˈɪntəlekt]","meaning":"n.智力；理解力","collocation":"sharp intellect 敏锐才智；develop intellect 开发智力","movie":"《美丽心灵》His extraordinary intellect amazed all scholars.","sentence":"Reading helps develop children’s intellect."},
+    {"word":"intellectual","phonetic":"[ˌɪntəˈlektʃuəl]","meaning":"adj. 智力的","collocation":"intellectual activity 脑力活动；intellectual development 智力发展","movie":"《心灵捕手》He loved all kinds of intellectual challenges.","sentence":"Chess is a good intellectual game."},
+    {"word":"intense","phonetic":"[ɪnˈtens]","meaning":"adj.强烈的；紧张的","collocation":"intense heat 酷热；intense competition 激烈竞争","movie":"《星际穿越》They faced intense cold on the ice planet.","sentence":"The exam brings intense pressure to students."},
+    {"word":"intention","phonetic":"[ɪnˈtenʃn]","meaning":"n. 意图；目的","collocation":"good intention 善意；hide one’s intention 隐藏意图","movie":"《傲慢与偏见》His real intention was to marry Elizabeth.","sentence":"I have no intention of giving up my hobby."},
+    {"word":"interact","phonetic":"[ˌɪntərˈækt]","meaning":"v. 相互作用","collocation":"interact with classmates 和同学互动；chemical interact 化学反应","movie":"《阿凡达》Humans and Na’vi interacted in different ways.","sentence":"Parents should interact more with their kids."},
+    {"word":"internal","phonetic":"[ɪnˈtɜ:nl]","meaning":"adj. 内部的，内在的","collocation":"internal conflict 内心矛盾；internal affairs 内部事务","movie":"《肖申克的救赎》Andy’s internal hope never faded.","sentence":"The doctor checked his internal organs carefully."},
+    {"word":"interpret","phonetic":"[ɪnˈtɜ:prɪt]","meaning":"v.解释；口译；演绎","collocation":"interpret dreams 解梦；interpret foreign speech 口译","movie":"《美丽心灵》He tried to interpret complex math signs.","sentence":"Can you interpret this English sentence for me?"},
+    {"word":"invade","phonetic":"[ɪnˈveɪd]","meaning":"v. 侵入，侵略","collocation":"invade the country 入侵国家；invade privacy 侵犯隐私","movie":"《阿凡达》Humans invaded Pandora for mineral resources.","sentence":"Don’t invade others’ private space without permission."},
+    {"word":"invaluable","phonetic":"[ɪnˈvæljuəbl]","meaning":"adj. 无价的","collocation":"invaluable treasure 无价珍宝；invaluable experience 宝贵经验","movie":"《泰坦尼克号》The old photos are invaluable to Rose.","sentence":"Your advice is invaluable to my study."},
+    {"word":"invasion","phonetic":"[ɪnˈveɪʒn]","meaning":"n.侵入；侵略","collocation":"foreign invasion 外敌入侵；invasion of privacy 隐私侵犯","movie":"《阿凡达》The human invasion destroyed the forest.","sentence":"The country fought against foreign invasion bravely."},
+    {"word":"invest","phonetic":"[ɪnˈvest]","meaning":"vt. 投资；投入时间精力","collocation":"invest money 投资；invest time in study 投入时间学习","movie":"《当幸福来敲门》He decided to invest in medical machines.","sentence":"Invest more effort and you will make progress."},
+    {"word":"investigate","phonetic":"[ɪnˈvestɪgeɪt]","meaning":"v. 调查","collocation":"investigate the case 调查案件；investigate the cause 追查原因","movie":"《十二怒汉》The jury needed to investigate all clues.","sentence":"Police will investigate the traffic accident."},
+    {"word":"invisible","phonetic":"[ɪnˈvɪzəbl]","meaning":"adj.看不见的；无形的","collocation":"invisible gas 无形气体；invisible enemy 看不见的敌人","movie":"《哈利波特》The cloak makes Harry invisible.","sentence":"Air is invisible to human eyes."},
+    {"word":"irregular","phonetic":"[ɪˈregjələ(r)]","meaning":"adj. 不规则的","collocation":"irregular verb 不规则动词；irregular schedule 不规律作息","movie":"《肖申克的救赎》Prison meals came at irregular times.","sentence":"His heartbeat became irregular after running."},
+    {"word":"isolate","phonetic":"[ˈaɪsəleɪt]","meaning":"vt.使隔离；使孤立","collocation":"isolate patients 隔离病人；isolate oneself 自我封闭","movie":"《绿皮书》Dr. Shirley felt isolated among white people.","sentence":"Bad friends will isolate you from your family."},
+    {"word":"jealous","phonetic":"[ˈdʒeləs]","meaning":"adj. 羡慕的；妒忌的","collocation":"be jealous of sb’s success 嫉妒他人成功","movie":"《哈利波特》Some students were jealous of Harry’s fame.","sentence":"I am not jealous of your new bike."},
+    {"word":"justice","phonetic":"[ˈdʌstɪs]","meaning":"n.公正,公平","collocation":"seek justice 寻求公正；social justice 社会公平","movie":"《肖申克的救赎》Andy fought for justice in the end.","sentence":"Everyone hopes to live in a world of justice."},
+    {"word":"justify","phonetic":"[ˈdʒʌstɪfaɪ]","meaning":"vt.证明…正当；为…辩护","collocation":"justify one’s action 证明行为合理；justify the choice 佐证选择正确","movie":"《十二怒汉》No evidence can justify sending the boy to jail.","sentence":"Nothing can justify lying to your parents."},
+    {"word":"launch","phonetic":"[lɔ:ntʃ]","meaning":"vt.发射；开始实施","collocation":"launch a rocket 发射火箭；launch a plan 启动方案","movie":"《火星救援》They will launch a spaceship to save Mark.","sentence":"Our school will launch a reading campaign next week."},
+    {"word":"legal","phonetic":"[ˈli:gl]","meaning":"adj. 合法的","collocation":"legal right 合法权利；legal method 合法途径","movie":"《绿皮书》Racial discrimination was once legal in some states.","sentence":"It’s legal to park here after 7 p.m."},
+    {"word":"leisure","phonetic":"[ˈleʒə(r)]","meaning":"adj./n. 空闲（的）；闲暇（的）","collocation":"leisure time 闲暇时光；leisure activity 休闲活动","movie":"《阿甘正传》He had no leisure to rest when young.","sentence":"I like reading in my leisure time."},
+    {"word":"liberate","phonetic":"[ˈlɪbəreɪt]","meaning":"vt.解放","collocation":"liberate people 解放人民；liberate the mind 解放思想","movie":"《肖申克的救赎》Andy liberated himself from prison walls.","sentence":"Reading liberates your mind from ignorance."},
+    {"word":"liberty","phonetic":"[ˈlɪbəti]","meaning":"n.自由","collocation":"fight for liberty 为自由抗争；personal liberty 人身自由","movie":"《肖申克的救赎》Liberty is worth 19 years of waiting.","sentence":"All people deserve liberty and equality."},
+    {"word":"logical","phonetic":"[ˈlɒdʒɪkl]","meaning":"adj.逻辑上的；符合逻辑的","collocation":"logical thinking 逻辑思维；logical conclusion 合理结论","movie":"《十二怒汉》His reasoning was clear and logical.","sentence":"It’s logical to rest after long study."},
+    {"word":"loyal","phonetic":"[ˈlɔɪəl]","meaning":"adj. 忠诚的；忠心的","collocation":"loyal friend 忠实好友；loyal to one’s dream 忠于理想","movie":"《忠犬八公》Hachi remained loyal to his owner forever.","sentence":"Stay loyal to your family through hard times."},
+    {"word":"loyalty","phonetic":"[ˈlɔɪəlti]","meaning":"n.忠诚；忠心耿耿","collocation":"show loyalty 表达忠诚；deep loyalty 赤诚忠心","movie":"《忠犬八公》The film tells a story of endless loyalty.","sentence":"We value loyalty between classmates."},
+    {"word":"luxurious","phonetic":"[lʌgˈʒʊəriəs]","meaning":"adj.奢侈的；豪华的","collocation":"luxurious hotel 豪华酒店；luxurious life 奢靡生活","movie":"《泰坦尼克号》First class offered luxurious rooms.","sentence":"We spent a luxurious weekend at the seaside."},
+    {"word":"luxury","phonetic":"[ˈlʌkʃəri]","meaning":"n.奢侈","collocation":"live in luxury 过奢华生活；a luxury trip 奢华旅行","movie":"《了不起的盖茨比》Gatsby lived a life of luxury.","sentence":"Fresh fruit was a luxury in winter long ago."},
+    {"word":"magnificent","phonetic":"[mægˈnɪfɪsnt]","meaning":"adj.壮丽的，宏伟的","collocation":"magnificent mountain 壮丽山川；magnificent building 宏伟建筑","movie":"《泰坦尼克号》The grand hall of the ship was magnificent.","sentence":"We saw a magnificent sunset by the sea."},
+    {"word":"maintain","phonetic":"[meɪnˈteɪn]","meaning":"vt.维持；维修；主张","collocation":"maintain peace 维持和平；maintain equipment 维修设备","movie":"《肖申克的救赎》Andy maintained hope for 19 years.","sentence":"We must maintain good health habits every day."},
+    {"word":"major","phonetic":"[ˈmeɪdʒə(r)]","meaning":"n. 主修科目 adj.主要的 v. 主修","collocation":"major problem 主要问题；major in English 主修英语","movie":"《心灵捕手》His major was advanced mathematics.","sentence":"History is my major in college."},
+    {"word":"majority","phonetic":"[məˈdʒɒrəti]","meaning":"n.大多数","collocation":"the majority of people 大多数人；win the majority 获得多数支持","movie":"《十二怒汉》At first, the majority thought the boy was guilty.","sentence":"The majority of students agree with the rule."},
+    {"word":"manufacture","phonetic":"[ˌmænjuˈfæktʃə(r)]","meaning":"vt/n. 制造；生产","collocation":"manufacture cars 生产汽车；manufacture daily goods 制造日用品","movie":"《华尔街》The factory manufactures electronic parts.","sentence":"This factory manufactures toys for kids."},
+    {"word":"marine","phonetic":"[məˈri:n]","meaning":"adj. 海洋的","collocation":"marine life 海洋生物；marine pollution 海洋污染","movie":"《泰坦尼克号》Many marine animals live in deep sea.","sentence":"We study marine biology in this course."},
+    {"word":"mature","phonetic":"[məˈtʃʊə(r)]","meaning":"adj.成熟的 v. (使)成熟","collocation":"mature mind 成熟心智；mature fruit 成熟果实","movie":"《爱乐之城》They became more mature after separation.","sentence":"Girls mature faster than boys in psychology."},
+    {"word":"maturity","phonetic":"[məˈtʊərəti]","meaning":"n.成熟","collocation":"reach maturity 走向成熟；emotional maturity 心智成熟","movie":"《阿甘正传》He gained maturity after many failures.","sentence":"Travelling brings youth greater maturity."},
+    {"word":"maximize","phonetic":"[ˈmæksɪmaɪz]","meaning":"vt.（使）最大化","collocation":"maximize profit 利润最大化；maximize efficiency 效率最大化","movie":"《华尔街》Businessmen try to maximize their income.","sentence":"We should maximize our spare time to read."},
+    {"word":"meantime","phonetic":"[ˈmi:ntaɪm]","meaning":"n.其间","collocation":"in the meantime 与此同时","movie":"《泰坦尼克号》Jack waited; in the meantime, Rose escaped her family.","sentence":"I’ll cook; in the meantime, you clean the table."},
+    {"word":"meanwhile","phonetic":"[ˈmi:nwaɪl]","meaning":"adv. 在这其间；同时","collocation":"work hard; meanwhile keep healthy 努力同时保重身体","movie":"《星际穿越》The earth dried up; meanwhile, humans searched new planets.","sentence":"Tom was reading; meanwhile, Lily was writing."},
+    {"word":"memorable","phonetic":"[ˈmemərəbl]","meaning":"adj.值得纪念的","collocation":"memorable trip 难忘旅途；memorable moment 珍贵瞬间","movie":"《泰坦尼克号》The night they met was memorable forever.","sentence":"This summer holiday is memorable for me."},
+    {"word":"mental","phonetic":"[ˈmentl]","meaning":"adj.精神的；智力的","collocation":"mental health 心理健康；mental work 脑力劳动","movie":"《美丽心灵》He suffered from mental illness for years.","sentence":"Mental rest is as important as physical rest."},
+    {"word":"merciful","phonetic":"[ˈmɜ:sɪfl]","meaning":"adj.慈悲的；宽容的","collocation":"merciful judge 仁慈法官；merciful treatment 宽厚对待","movie":"《肖申克的救赎》The old prisoner was merciful to new inmates.","sentence":"Be merciful to people who make small mistakes."},
+    {"word":"mercy","phonetic":"[ˈmɜ:si]","meaning":"n.慈悲；宽容","collocation":"show mercy 施以宽容；beg for mercy 乞求宽恕","movie":"《肖申克的救赎》The warden showed no mercy to Andy.","sentence":"We should treat stray animals with mercy."},
+    {"word":"mere","phonetic":"[mɪə(r)]","meaning":"adj. 仅仅的","collocation":"a mere child 只是个孩子；mere words 空言","movie":"《泰坦尼克号》A mere glance made them fall in love.","sentence":"It’s a mere waste of time to wait here."},
+    {"word":"mess","phonetic":"[mes]","meaning":"n.混乱的局面；困境","collocation":"in a mess 一团糟；clear up the mess 收拾烂摊子","movie":"《老友记》Rachel’s room was always a mess.","sentence":"The classroom was in a mess after the party."},
+    {"word":"mild","phonetic":"[maɪld]","meaning":"adj.温和的；温暖的","collocation":"mild weather 温和气候；mild temper 温和脾气","movie":"《绿皮书》Dr. Shirley had a mild voice all the time.","sentence":"The winter here is mild without heavy snow."},
+    {"word":"milestone","phonetic":"[ˈmaɪlstəʊn]","meaning":"n.里程碑","collocation":"career milestone 事业里程碑；historical milestone 历史转折点","movie":"《当幸福来敲门》Getting the internship was his biggest milestone.","sentence":"Passing college exam is a life milestone."},
+    {"word":"military","phonetic":"[ˈmɪlətri]","meaning":"adj. 军事的","collocation":"military power 军事力量；military training 军训","movie":"《阿甘正传》He joined the military during the war.","sentence":"The country strengthens military defense every year."},
+    {"word":"minimum","phonetic":"[ˈmɪnɪməm]","meaning":"n.最小值","collocation":"reach the minimum 达到最低值；minimum cost 最低成本","movie":"《火星救援》The machine needs a minimum of power to run.","sentence":"The minimum score for passing is 60."},
+    {"word":"minor","phonetic":"[ˈmaɪnə(r)]","meaning":"adj.较小的；次要的","collocation":"minor problem 小问题；minor role 配角","movie":"《十二怒汉》His opinion was minor at first.","sentence":"This is just a minor mistake, don’t worry."},
+    {"word":"minority","phonetic":"[maɪˈnɒrəti]","meaning":"n. 少数；少数民族","collocation":"ethnic minority 少数民族；only a minority 极少数","movie":"《绿皮书》Black people belonged to the minority back then.","sentence":"Only a minority of students like math."},
+    {"word":"miracle","phonetic":"[ˈmɪrəkl]","meaning":"n. 奇迹","collocation":"work a miracle 创造奇迹；a miracle of survival 生还奇迹","movie":"《泰坦尼克号》It was a miracle that Rose survived alone.","sentence":"Hard work can create miracles in study."},
+    {"word":"miraculous","phonetic":"[mɪˈrækjələs]","meaning":"adj.奇迹的","collocation":"miraculous recovery 奇迹般康复；miraculous escape 死里逃生","movie":"《肖申克的救赎》His escape was a miraculous secret.","sentence":"The patient made a miraculous recovery overnight."},
+    {"word":"mirror","phonetic":"[ˈmɪrə(r)]","meaning":"vt. 反射；反映","collocation":"mirror reality 映照现实；mirror one’s face 照镜子","movie":"《哈利波特》The mirror mirrored his deepest desire.","sentence":"The lake mirrors the mountain clearly."},
+    {"word":"miserable","phonetic":"[ˈmɪzrəbl]","meaning":"adj. 痛苦的；悲惨的","collocation":"miserable life 悲惨生活；feel miserable 感到痛苦","movie":"《海边曼彻斯特》He lived a miserable life after the accident.","sentence":"I felt miserable when I failed the test."},
+    {"word":"misery","phonetic":"[ˈmɪzəri]","meaning":"n.痛苦；悲惨的境遇","collocation":"endless misery 无尽痛苦；share joy and misery 同甘共苦","movie":"《肖申克的救赎》Prison brought endless misery to inmates.","sentence":"No one can bear such misery for long."},
+    {"word":"mobile","phonetic":"[ˈməʊbaɪl]","meaning":"adj.移动的；流动的","collocation":"mobile phone 手机；mobile library 流动图书馆","movie":"《当幸福来敲门》He carried a mobile medical machine everywhere.","sentence":"Mobile payment changes people’s daily life."},
+    {"word":"moderate","phonetic":"[ˈmɒdərət]","meaning":"adj. 适度的；温和的","collocation":"moderate speed 适中速度；moderate attitude 温和态度","movie":"《绿皮书》Tony learned to keep a moderate temper.","sentence":"Moderate exercise is good for health."},
+    {"word":"monitor","phonetic":"[ˈmɒnɪtə(r)]","meaning":"n. 班长；监视器 v. 监控","collocation":"monitor the class 管理班级；monitor data 监控数据","movie":"《楚门的世界》Cameras monitor his every move.","sentence":"Teachers monitor students’ study progress."},
+    {"word":"moral","phonetic":"[ˈmɒrəl]","meaning":"adj.道德上的；有道德的","collocation":"moral standard 道德标准；moral support 精神支持","movie":"《十二怒汉》He stuck to his moral judgment of the boy.","sentence":"We should follow basic moral rules."},
+    {"word":"morality","phonetic":"[məˈræləti]","meaning":"n.道德；伦理","collocation":"public morality 公共道德；traditional morality 传统伦理","movie":"《绿皮书》The film discusses race and morality deeply.","sentence":"Society relies on shared morality to run."},
+    {"word":"moreover","phonetic":"[mɔ:rˈəʊvə(r)]","meaning":"adv.而且；此外","collocation":"cheap, moreover durable 便宜而且耐用","movie":"《死亡诗社》Poetry is warm; moreover, it frees minds.","sentence":"The city is clean; moreover, people are friendly."},
+    {"word":"motivate","phonetic":"[ˈməʊtɪveɪt]","meaning":"vt.使产生动机；激发","collocation":"motivate students 激励学生；motivate action 促进行动","movie":"《当幸福来敲门》His son motivated him to keep trying.","sentence":"Good goals motivate us to study harder."},
+    {"word":"motivation","phonetic":"[ˌməʊtɪ'veɪʃn]","meaning":"n. 动机；积极性","collocation":"strong motivation 强烈动力；lack motivation 缺乏干劲","movie":"《摔跤吧爸爸》Her motivation was to win honor for the country.","sentence":"High motivation leads to better grades."},
+    {"word":"movement","phonetic":"[ˈmu:vmənt]","meaning":"n.运动；活动","collocation":"social movement 社会运动；body movement 肢体动作","movie":"《永不妥协》She led a public movement against pollution.","sentence":"The dance requires smooth body movements."},
+    {"word":"mysterious","phonetic":"[mɪˈstɪəriəs]","meaning":"adj.神秘的，难以理解的","collocation":"mysterious story 神秘故事；mysterious stranger 神秘陌生人","movie":"《哈利波特》The old house looked mysterious at night.","sentence":"The origin of the stone remains mysterious."},
+    {"word":"mystery","phonetic":"[ˈmɪstri]","meaning":"n.神秘；谜","collocation":"solve a mystery 解开谜团；a deep mystery 难解之谜","movie":"《控方证人》The murder was a big mystery at first.","sentence":"How the ancient building was built is still a mystery."},
+    {"word":"negative","phonetic":"[ˈnegətɪv]","meaning":"adj.否定的；消极的","collocation":"negative attitude 消极态度；negative answer 否定答复","movie":"《当幸福来敲门》Don’t hold negative thoughts about failure.","sentence":"Stop thinking in negative ways."},
+    {"word":"negotiate","phonetic":"[nɪˈgəʊʃieɪt]","meaning":"v. 谈判，协商","collocation":"negotiate a deal 协商交易；negotiate with partners 和伙伴洽谈","movie":"《华尔街》The two companies negotiated for three days.","sentence":"We need to negotiate a better price."},
+    {"word":"neutral","phonetic":"[ˈnju:trəl]","meaning":"adj. 中立的；不确定的","collocation":"neutral position 中立立场；neutral color 中性色系","movie":"《十二怒汉》At first, he kept a neutral opinion.","sentence":"The judge must stay neutral during the case."},
+    {"word":"nevertheless","phonetic":"[ˌnevəðəˈles]","meaning":"adv. 不过；仍然 conj.然而","collocation":"hard; nevertheless we persist 艰难但我们坚持","movie":"《肖申克的救赎》Prison was cruel; nevertheless Andy kept hope.","sentence":"It rained; nevertheless we went hiking."},
+    {"word":"noble","phonetic":"[ˈnəʊbl]","meaning":"adj.高贵的；高尚的","collocation":"noble spirit 高尚精神；noble character 崇高品格","movie":"《泰坦尼克号》Jack had a noble heart though poor.","sentence":"Helping strangers is a noble act."},
+    {"word":"numerous","phonetic":"[ˈnju:mərəs]","meaning":"adj.许多的","collocation":"numerous people 许多人；numerous mistakes 大量错误","movie":"《阿甘正传》He made numerous friends during running.","sentence":"Numerous birds fly south every autumn."},
+    {"word":"nutrition","phonetic":"[njuˈtrɪʃn]","meaning":"n.营养","collocation":"balance nutrition 均衡营养；absorb nutrition 吸收营养","movie":"《火星救援》He grew potatoes for nutrition on Mars.","sentence":"Fruits and vegetables provide rich nutrition."},
+    {"word":"obedient","phonetic":"[əˈbi:diənt]","meaning":"adj. 服从的；顺从的","collocation":"obedient child 听话的孩子；obedient to rules 遵守规则","movie":"《死亡诗社》The school wanted obedient students only.","sentence":"Dogs are usually obedient to their owners."},
+    {"word":"objection","phonetic":"[əbˈdʒekʃn]","meaning":"n. 反对","collocation":"raise an objection 提出异议；strong objection 强烈反对","movie":"《十二怒汉》He raised an objection to the evidence.","sentence":"No one has any objection to this plan."},
+    {"word":"objective","phonetic":"[əbˈdʒektɪv]","meaning":"adj.客观的 n. 目的，目标","collocation":"objective analysis 客观分析；main objective 核心目标","movie":"《十二怒汉》We must keep objective while judging.","sentence":"Our objective is to finish all tasks today."},
+    {"word":"oblige","phonetic":"[əˈblaɪdʒ]","meaning":"vt.强迫，迫使","collocation":"be obliged to do 不得不做；oblige sb to agree 迫使某人同意","movie":"《泰坦尼克号》He was obliged to hide Rose from her family.","sentence":"Bad weather obliged us to stay home."},
+    {"word":"observation","phonetic":"[ˌɒbzəˈveɪʃn]","meaning":"n.观察；注意","collocation":"careful observation 细致观察；make observation 进行观测","movie":"《心灵捕手》His sharp observation found all math rules.","sentence":"Good scientists rely on careful observation."},
+    {"word":"obstacle","phonetic":"[ˈɒbstəkl]","meaning":"n.障碍（物）","collocation":"overcome obstacle 克服障碍；big obstacle 巨大阻碍","movie":"《当幸福来敲门》Poverty was his biggest obstacle.","sentence":"Laziness is an obstacle to success."},
+    {"word":"occasion","phonetic":"[əˈkeɪʒn]","meaning":"n.场合；时刻","collocation":"special occasion 特殊场合；on this occasion 在此时刻","movie":"《泰坦尼克号》The dance was a perfect occasion to meet.","sentence":"Dress formally for important occasions."},
+    {"word":"occasional","phonetic":"[əˈkeɪʒənl]","meaning":"adj.偶尔的","collocation":"occasional visit 偶尔拜访；occasional rain 零星小雨","movie":"《老友记》We have occasional dinners together.","sentence":"I take occasional walks after dinner."},
+    {"word":"occupation","phonetic":"[ˌɒkjuˈpeɪʃn]","meaning":"n.工作；职业","collocation":"main occupation 主业；choose an occupation 选择职业","movie":"《当幸福来敲门》His occupation was medical machine salesman.","sentence":"Teaching is a respected occupation."},
+    {"word":"occupy","phonetic":"[ˈɒkjupaɪ]","meaning":"vt. 占据，占有","collocation":"occupy time 占用时间；occupy a room 占用房间","movie":"《肖申克的救赎》The small cell occupied all his days.","sentence":"Studying occupies most of my daily time."},
+    {"word":"offend","phonetic":"[əˈfend]","meaning":"vt.冒犯；得罪","collocation":"offend others 冒犯他人；be offended 感到被冒犯","movie":"《绿皮书》His rude words offended Dr. Shirley.","sentence":"I didn’t mean to offend you yesterday."},
+    {"word":"offensive","phonetic":"[əˈfensɪv]","meaning":"adj.冒犯的","collocation":"offensive language 冒犯性言语；offensive behavior 无礼举动","movie":"《绿皮书》The waiter made offensive comments about black people.","sentence":"Please don’t use offensive words in public."},
+    {"word":"omit","phonetic":"[əˈmɪt]","meaning":"vt.省略；遗漏","collocation":"omit details 省略细节；omit important points 漏掉重点","movie":"《肖申克的救赎》Andy omitted his real plan in the letter.","sentence":"Don’t omit your name on the form."},
+    {"word":"opponent","phonetic":"[əˈpəʊnənt]","meaning":"n.对手","collocation":"strong opponent 强劲对手；defeat the opponent 击败对手","movie":"《摔跤吧爸爸》She beat every opponent in the match.","sentence":"Respect your opponent during competition."},
+    {"word":"oppose","phonetic":"[əˈpəʊz]","meaning":"vt.反对；反抗","collocation":"oppose the plan 反对方案；oppose unfair rules 抵制不公规定","movie":"《永不妥协》Local officials opposed her protection movement.","sentence":"Many students oppose the new homework rule."},
+    {"word":"opposite","phonetic":"[ˈɒpəzɪt]","meaning":"n.对立面 adj.对面的 adv.在对面","collocation":"the opposite direction 反方向；complete opposite 完全相反","movie":"《傲慢与偏见》Their personalities are exact opposites.","sentence":"The shop is just opposite our school."},
+    {"word":"opposition","phonetic":"[ˌɒpəˈzɪʃn]","meaning":"n.反对","collocation":"meet opposition 遭遇反对；face strong opposition 面临强烈抵制","movie":"《死亡诗社》The headmaster’s opposition stopped our poetry class.","sentence":"The plan met great opposition from parents."},
+    {"word":"oppress","phonetic":"[əˈpres]","meaning":"vt.压迫，压制","collocation":"oppress the weak 压迫弱者；oppress people’s thoughts 禁锢思想","movie":"《绿皮书》Black people were oppressed by unfair laws.","sentence":"War oppresses the lives of ordinary people."},
+    {"word":"option","phonetic":"[ˈɒpʃn]","meaning":"n.选择；选课","collocation":"have no option 别无选择；best option 最佳选择","movie":"《星际穿越》Our only option is to leave Earth.","sentence":"Studying hard is your best option now."},
+    {"word":"origin","phonetic":"[ˈɒrɪdʒɪn]","meaning":"n. 起源","collocation":"the origin of life 生命起源；country of origin 原产地","movie":"《2001太空漫游》The film talks about the origin of human intelligence.","sentence":"We are researching the origin of this old custom."},
+    {"word":"original","phonetic":"[əˈrɪdʒənl]","meaning":"adj. 起初的；原创的 n.原作","collocation":"original idea 原创想法；original painting 原画","movie":"《心灵捕手》His math theories were totally original.","sentence":"This copy cannot compare with the original."},
+    {"word":"originate","phonetic":"[əˈrɪdʒɪneɪt]","meaning":"v.起源，创始","collocation":"originate from ancient times 起源于古代；originate a style 开创风格","movie":"《泰坦尼克号》Their love story originated on the ship.","sentence":"This custom originated hundreds of years ago."},
+    {"word":"otherwise","phonetic":"[ˈʌðəwaɪz]","meaning":"adv/conj. 否则；不然","collocation":"hurry otherwise late 快点否则迟到","movie":"《肖申克的救赎》Run fast, otherwise the guards will catch you.","sentence":"Study hard; otherwise you will fail the exam."},
+    {"word":"outcome","phonetic":"[ˈaʊtkʌm]","meaning":"n. 结果","collocation":"final outcome 最终结果；unexpected outcome 意外结局","movie":"《十二怒汉》No one could predict the jury’s outcome.","sentence":"No one knows the outcome of the game yet."},
+    {"word":"outline","phonetic":"[ˈaʊtlaɪn]","meaning":"n. 轮廓；提纲 vt.概述","collocation":"essay outline 作文提纲；outline the plan 简述方案","movie":"《泰坦尼克号》The outline of the big ship impressed everyone.","sentence":"Write an outline before writing your article."},
+    {"word":"outlook","phonetic":"[ˈaʊtlʊk]","meaning":"n.观点；前景","collocation":"positive outlook 乐观心态；economic outlook 经济前景","movie":"《阿甘正传》He holds a bright outlook for life.","sentence":"Experts have a good outlook for this industry."},
+    {"word":"overlook","phonetic":"[ˌəʊvəˈlʊk]","meaning":"vt.忽视；俯瞰","collocation":"overlook mistakes 忽视错误；overlook the whole city 俯瞰全城","movie":"《肖申克的救赎》The guards overlooked the small tunnel.","sentence":"Don’t overlook small grammar mistakes."},
+    {"word":"overtake","phonetic":"[ˌəʊvəˈteɪk]","meaning":"vt.超车；赶上，超过","collocation":"overtake competitors 超越对手；overtake the car ahead 超车","movie":"《阿甘正传》He overtook all runners in the race.","sentence":"Our class overtook others in exam scores."},
+    {"word":"panic","phonetic":"[ˈpænɪk]","meaning":"n/vi. 恐慌，惊慌","collocation":"fall into panic 陷入恐慌；don’t panic 不要惊慌","movie":"《泰坦尼克号》Passengers panicked when the ship sank.","sentence":"Don’t panic when you meet unexpected problems."},
+    {"word":"participate","phonetic":"[pɑ:ˈtɪsɪpeɪt]","meaning":"vi.参加，参与","collocation":"participate in activities 参加活动；participate in discussion 参与讨论","movie":"《死亡诗社》All students participated in reading poems.","sentence":"Everyone should participate in class discussions."},
+    {"word":"passive","phonetic":"[ˈpæsɪv]","meaning":"adj.被动的，消极的","collocation":"passive attitude 消极态度；passive learning 被动学习","movie":"《海边曼彻斯特》He lived a passive life after the accident.","sentence":"Don’t be passive when facing difficulties."},
+    {"word":"pattern","phonetic":"[ˈpætn]","meaning":"n. 模式；图案","collocation":"behavior pattern 行为模式；cloth pattern 布料花纹","movie":"《美丽心灵》He found a hidden number pattern.","sentence":"This city follows a clear development pattern."},
+    {"word":"peculiar","phonetic":"[pɪˈkju:liə(r)]","meaning":"adj. 奇怪的；独特的","collocation":"peculiar habit 奇特习惯；peculiar culture 独特文化","movie":"《哈利波特》Hogwarts has a peculiar magic culture.","sentence":"This plant has a peculiar smell at night."},
+    {"word":"permanent","phonetic":"[ˈpɜ:mənənt]","meaning":"adj.永久的；长期不变的","collocation":"permanent job 稳定工作；permanent memory 永久回忆","movie":"《肖申克的救赎》Freedom was his permanent dream.","sentence":"This mark on the wall is permanent."},
+    {"word":"perseverance","phonetic":"[ˌpɜ:sɪˈvɪərəns]","meaning":"n.毅力","collocation":"great perseverance 强大毅力；success through perseverance 坚持换来成功","movie":"《当幸福来敲门》His perseverance finally won him the job.","sentence":"Perseverance is the key to long-term goals."},
+    {"word":"persevere","phonetic":"[ˌpɜ:sɪˈvɪə(r)]","meaning":"vi. 坚持不懈","collocation":"persevere through hardship 在苦难中坚持","movie":"《肖申克的救赎》Andy persevered for nineteen years.","sentence":"Persevere and you will reach your goal."},
+    {"word":"persuasion","phonetic":"[pəˈsweɪʒn]","meaning":"n.说服","collocation":"power of persuasion 说服力；gentle persuasion 温和劝导","movie":"《十二怒汉》His persuasion changed all jurors’ minds.","sentence":"Her persuasion made him change his plan."},
+    {"word":"persuasive","phonetic":"[pəˈsweɪsɪv]","meaning":"adj. 有说服力的","collocation":"persuasive speech 有说服力的演讲；persuasive evidence 有力证据","movie":"《十二怒汉》His logical words were highly persuasive.","sentence":"The teacher gave a persuasive explanation."},
+     {"word":"phenomenon","phonetic":"[fəˈnɒmɪnən]","meaning":"n.现象","collocation":"social phenomenon 社会现象；natural phenomenon 自然现象","movie":"《2001太空漫游》The strange space phenomenon shocked scientists.","sentence":"Snow in summer is a rare phenomenon."},
+    {"word":"policy","phonetic":"[ˈpɒləsi]","meaning":"n.政策，方针","collocation":"government policy 政府政策；education policy 教育方针","movie":"《永不妥协》The company’s pollution policy hurt local residents.","sentence":"Our school carried a new reading policy this term."},
+    {"word":"positive","phonetic":"[ˈpɒzətɪv]","meaning":"adj.积极的；肯定的；明确的","collocation":"positive attitude 积极心态；positive feedback 正面反馈","movie":"《阿甘正传》Always keep a positive view of life.","sentence":"We should stay positive when facing failures."},
+    {"word":"possess","phonetic":"[pəˈzes]","meaning":"vt.占有,拥有；具有（品质等）","collocation":"possess good qualities 拥有优良品质；possess land 拥有土地","movie":"《了不起的盖茨比》He possessed huge wealth but felt lonely.","sentence":"She possesses a great gift for painting."},
+    {"word":"postpone","phonetic":"[pəˈspəʊn]","meaning":"vt.推迟；使延期","collocation":"postpone the meeting 推迟会议；postpone travel 延后出行","movie":"《泰坦尼克号》They postponed their plan to travel together.","sentence":"We have to postpone the sports meet due to rain."},
+    {"word":"potential","phonetic":"[pəˈtenʃl]","meaning":"adj.潜在的,可能的 n.潜力,可能性","collocation":"potential risk 潜在风险；tap one’s potential 挖掘潜力","movie":"《心灵捕手》The boy had endless math potential.","sentence":"Every student has great learning potential."},
+    {"word":"poverty-stricken","phonetic":"[ˈpɔvəti:ˌstrɪkən]","meaning":"adj.受贫困侵袭的,非常贫苦","collocation":"poverty-stricken families 贫困家庭；poverty-stricken area 贫困地区","movie":"《当幸福来敲门》They lived in a poverty-stricken small room.","sentence":"Volunteers help poverty-stricken villages every year."},
+    {"word":"predict","phonetic":"[prɪˈdɪkt]","meaning":"vt.预言，预报","collocation":"predict the future 预测未来；predict weather 预报天气","movie":"《星际穿越》No one could predict the earth’s sandstorm disaster.","sentence":"Experts predict prices will rise next month."},
+    {"word":"preference","phonetic":"[ˈprefrəns]","meaning":"n.偏爱","collocation":"personal preference 个人偏好；have a preference for 偏爱","movie":"《傲慢与偏见》Her preference was a sincere gentleman.","sentence":"I have a preference for quiet countryside."},
+    {"word":"preservation","phonetic":"[ˌprezəˈveɪʃn]","meaning":"n.保护；保存","collocation":"cultural preservation 文化保护；food preservation 食物保鲜","movie":"《泰坦尼克号》The museum works on the preservation of ship relics.","sentence":"We focus on the preservation of ancient buildings."},
+    {"word":"preserve","phonetic":"[prɪˈzɜ:v]","meaning":"vt.保护；保存","collocation":"preserve history 保存历史；preserve forest 保护森林","movie":"《阿凡达》The Na’vi try to preserve their home forest.","sentence":"We use cold storage to preserve fruit."},
+    {"word":"preview","phonetic":"[ˈpri:vju:]","meaning":"vt/n. 预习；试映；预展","collocation":"preview lessons 预习功课；movie preview 电影点映","movie":"《爱乐之城》We attended the preview of the musical film.","sentence":"Preview new words before each English class."},
+    {"word":"previous","phonetic":"[ˈpri:viəs]","meaning":"adj.先前的","collocation":"previous experience 过往经历；previous year 前一年","movie":"《肖申克的救赎》His previous life was full of unfairness.","sentence":"I have no knowledge of the previous plan."},
+    {"word":"primary","phonetic":"[ˈpraɪməri]","meaning":"adj.初等的；主要的；基本的","collocation":"primary school 小学；primary reason 首要原因","movie":"《心灵捕手》His primary talent lay in math.","sentence":"Safety is our primary goal in this activity."},
+    {"word":"principal","phonetic":"[ˈprɪnsəpl]","meaning":"adj.主要的 n.校长","collocation":"principal task 核心任务；school principal 校长","movie":"《死亡诗社》The principal disagreed with free poetry reading.","sentence":"The principal source of pollution is factory waste."},
+    {"word":"principle","phonetic":"[ˈprɪnsəpl]","meaning":"n.原理; 原则","collocation":"basic principle 基本原则；moral principle 道德准则","movie":"《十二怒汉》He stuck to his justice principle.","sentence":"We cannot break our life principles for benefit."},
+    {"word":"priority","phonetic":"[praɪˈɒrəti]","meaning":"n. 优先,重点；优先权","collocation":"top priority 重中之重；give priority to 优先考虑","movie":"《星际穿越》Saving humanity is our highest priority.","sentence":"Study should be your priority as a student."},
+    {"word":"privacy","phonetic":"[ˈprɪvəsi]","meaning":"n. 隐私","collocation":"protect privacy 保护隐私；personal privacy 个人隐私","movie":"《楚门的世界》He lost all privacy in the fake town.","sentence":"Don’t read others’ letters; respect their privacy."},
+    {"word":"procedure","phonetic":"[prəˈsi:dʒə(r)]","meaning":"n.程序；手续，步骤","collocation":"standard procedure 标准流程；application procedure 申请手续","movie":"《控方证人》The court followed strict legal procedure.","sentence":"Follow the safe procedure to operate the machine."},
+    {"word":"proceed","phonetic":"[prəˈsi:d]","meaning":"vi. 继续进行","collocation":"proceed with the plan 继续执行方案；proceed to the next step 进入下一步","movie":"《肖申克的救赎》Andy proceeded to dig the tunnel every night.","sentence":"After the break, we will proceed with class."},
+    {"word":"process","phonetic":"[ˈprəʊses]","meaning":"vt.处理，加工  n.过程；步骤","collocation":"production process 生产流程；process data 处理数据","movie":"《阿甘正传》Growing up is a slow and warm process.","sentence":"Making paper is a complex process."},
+    {"word":"productive","phonetic":"[prəˈdʌktɪv]","meaning":"adj. 多产的；富有成效的","collocation":"productive meeting 高效会议；productive study 高效学习","movie":"《当幸福来敲门》Every day was productive for his growth.","sentence":"Morning reading makes your study more productive."},
+    {"word":"profit","phonetic":"[ˈprɒfɪt]","meaning":"n.利润，利益  v.获利","collocation":"make profit 盈利；profit from experience 从经验获益","movie":"《华尔街》The businessman only cared about profit.","sentence":"You will profit a lot from reading more books."},
+    {"word":"prohibit","phonetic":"[prəˈhɪbɪt]","meaning":"vt. 禁止, 阻止","collocation":"prohibit smoking 禁止吸烟；prohibit unfair competition 禁止恶性竞争","movie":"《死亡诗社》The school prohibited independent thinking.","sentence":"Rules prohibit running inside the classroom building."},
+    {"word":"promotion","phonetic":"[prəˈməʊʃn]","meaning":"n. 促进，促销；晋升","collocation":"job promotion 升职；sales promotion 促销活动","movie":"《当幸福来敲门》The internship brought him a big promotion chance.","sentence":"The store held a big promotion on weekends."},
+    {"word":"proof","phonetic":"[pru:f]","meaning":"n.证明，证据 adj. 耐…的；能防…的","collocation":"solid proof 确凿证据；water proof 防水","movie":"《十二怒汉》They searched hard for proof of innocence.","sentence":"His hard work is proof of his persistence."},
+    {"word":"propose","phonetic":"[prəˈpəʊz]","meaning":"vt. 提议，建议","collocation":"propose a new plan 提出新方案；propose a toast 提议干杯","movie":"《傲慢与偏见》Mr. Darcy chose to propose to Elizabeth.","sentence":"I propose that we finish homework first."},
+    {"word":"prospect","phonetic":"[ˈprɒspekt]","meaning":"n. 预期;前景；v. 勘探，勘察","collocation":"bright prospect 光明前景；job prospect 就业前景","movie":"《爱乐之城》They sacrificed their love for career prospects.","sentence":"Hard work creates bright prospects for you."},
+    {"word":"protest","phonetic":"[ˈprəʊtest]","meaning":"n/v.抗议；异议","collocation":"peaceful protest 和平抗议；protest against unfairness 抗议不公","movie":"《永不妥协》Villagers gathered to protest factory pollution.","sentence":"Many students protest the unreasonable rule."},
+    {"word":"psychology","phonetic":"[saɪˈkɒlədʒi]","meaning":"n. 心理学","collocation":"social psychology 社会心理学；study psychology 学习心理学","movie":"《心灵捕手》He deeply understood human psychology.","sentence":"Reading psychology books helps understand people."},
+    {"word":"purchase","phonetic":"[ˈpɜ:tʃəs]","meaning":"n/vt. 购买","collocation":"purchase equipment 采购设备；daily purchase 日常采购","movie":"《当幸福来敲门》He purchased medical machines for sales.","sentence":"We will purchase new books for the library."},
+    {"word":"pure","phonetic":"[pjʊə(r)]","meaning":"adj. 纯的；纯净的；完美的","collocation":"pure water 纯净水；pure heart 纯粹内心","movie":"《泰坦尼克号》Jack’s love for Rose was pure and sincere.","sentence":"This pure wool sweater is warm and soft."},
+    {"word":"purify","phonetic":"[ˈpjʊərɪfaɪ]","meaning":"vt.净化","collocation":"purify water 净化水源；purify air 净化空气","movie":"《星际穿越》The machine can purify polluted soil.","sentence":"Plants help purify the air around us."},
+    {"word":"purity","phonetic":"[ˈpjʊərəti]","meaning":"n. 纯净；纯洁","collocation":"the purity of water 水质纯净度；purity of mind 心灵纯粹","movie":"《阿甘正传》Forrest’s life has simple purity.","sentence":"We test the purity of drinking water every day."},
+    {"word":"pursue","phonetic":"[pəˈsju:]","meaning":"vt.追逐,追求；从事","collocation":"pursue dreams 追逐梦想；pursue knowledge 求知","movie":"《爱乐之城》They each pursued their own artistic dreams.","sentence":"Never stop pursuing your life goals."},
+    {"word":"pursuit","phonetic":"[pəˈsju:t]","meaning":"n. 追捕，追求","collocation":"in pursuit of happiness 追寻幸福；the pursuit of success 追求成功","movie":"《当幸福来敲门》His whole life was in pursuit of a better life.","sentence":"Hard work is part of the pursuit of dreams."},
+    {"word":"qualification","phonetic":"[ˌkwɒlɪfɪˈkeɪʃn]","meaning":"n. 资格；资格证明","collocation":"professional qualification 职业资质；meet the qualification 符合条件","movie":"《当幸福来敲门》He gained the financial qualification finally.","sentence":"This certificate is your job qualification."},
+    {"word":"quote","phonetic":"[kwəʊt]","meaning":"vt.引用","collocation":"quote a sentence 引用句子；quote famous words 引用名言","movie":"《肖申克的救赎》People often quote his words about hope.","sentence":"The teacher quoted a poem in class."},
+    {"word":"radiation","phonetic":"[ˌreɪdiˈeɪʃn]","meaning":"n. 辐射","collocation":"solar radiation 太阳辐射；harmful radiation 有害辐射","movie":"《星际穿越》The planet had strong deadly radiation.","sentence":"We should stay away from high radiation areas."},
+    {"word":"random","phonetic":"[ˈrændəm]","meaning":"adj.任意的；随机的 n.任意行动","collocation":"random choice 随机选择；random test 随机抽查","movie":"《十二怒汉》The witness only gave random guesses.","sentence":"We picked random students for the survey."},
+    {"word":"react","phonetic":"[riˈækt]","meaning":"vi. 作出反应；起作用","collocation":"react to stress 应对压力；react quickly 快速反应","movie":"《泰坦尼克号》People reacted differently when the ship sank.","sentence":"How will you react to this bad news?"},
+    {"word":"readily","phonetic":"[ˈredɪli]","meaning":"adv.乐意地；迅速地","collocation":"readily accept 欣然接受；readily solve 快速解决","movie":"《绿皮书》Tony readily agreed to drive across the country.","sentence":"She readily helps every classmate in trouble."},
+    {"word":"realistic","phonetic":"[ˌri:əˈlɪstɪk]","meaning":"adj.现实的；逼真的","collocation":"realistic plan 务实方案；realistic painting 写实画作","movie":"《爱乐之城》They made a realistic choice to separate.","sentence":"We need to make a realistic travel budget."},
+    {"word":"reality","phonetic":"[riˈæləti]","meaning":"n. 现实；真实","collocation":"face reality 面对现实；escape from reality 逃避现实","movie":"《楚门的世界》He finally woke up to the cruel reality.","sentence":"Dreams are different from harsh reality."},
+    {"word":"reception","phonetic":"[rɪˈsepʃn]","meaning":"n.接受；接收；接待","collocation":"warm reception 热情接待；signal reception 信号接收","movie":"《泰坦尼克号》The grand reception hall was full of guests.","sentence":"The hotel reception welcomes visitors 24 hours."},
+    {"word":"recognition","phonetic":"[ˌrekəgˈnɪʃn]","meaning":"n.承认；认可","collocation":"gain public recognition 获得大众认可；recognition of effort 认可付出","movie":"《心灵捕手》His math talent won quick recognition.","sentence":"Hard work will win others’ recognition."},
+    {"word":"recommend","phonetic":"[ˌrekəˈmend]","meaning":"vt.推荐，建议","collocation":"recommend a book 推荐书籍；recommend doing sth 建议做某事","movie":"《老友记》I recommend this movie to all young people.","sentence":"Teachers recommend reading English novels daily."},
+    {"word":"recreation","phonetic":"[ˌrekriˈeɪʃn]","meaning":"n. 消遣，娱乐","collocation":"outdoor recreation 户外休闲；recreation time 休闲时光","movie":"《阿甘正传》Running was his favorite recreation.","sentence":"Swimming is a healthy recreation activity."},
+    {"word":"recycle","phonetic":"[ˌri:ˈsaɪkl]","meaning":"v/n.回收利用；再循环","collocation":"recycle waste paper 回收废纸；recycle plastic 回收塑料","movie":"《机器人总动员》Humans failed to recycle earth’s resources.","sentence":"We recycle bottles and cans to protect the environment."},
+    {"word":"reduction","phonetic":"[rɪˈdʌkʃn]","meaning":"n.减少；降低；缩小","collocation":"cost reduction 成本降低；reduction of pollution 污染减少","movie":"《华尔街》The factory saw a sharp reduction in profit.","sentence":"The new policy led to a reduction in traffic jams."},
+    {"word":"reference","phonetic":"[ˈrefrəns]","meaning":"n.参考；查阅","collocation":"reference book 参考书；for reference 仅供参考","movie":"《美丽心灵》He kept many math reference books at home.","sentence":"Keep this note for future reference."},
+    {"word":"reflect","phonetic":"[rɪˈflekt]","meaning":"vt. 反射；反映","collocation":"reflect light 反光；reflect social problems 反映社会问题","movie":"《爱乐之城》The film reflects young people’s dream struggles.","sentence":"Your grades reflect your daily study effort."},
+    {"word":"reform","phonetic":"[rɪˈfɔ:m]","meaning":"v/n. 改革","collocation":"education reform 教育改革；reform rules 整改制度","movie":"《肖申克的救赎》He hoped to reform the unfair prison system.","sentence":"The school carried out teaching reform this year."},
+    {"word":"refresh","phonetic":"[rɪˈfreʃ]","meaning":"vt.使恢复活力；使振作精神","collocation":"refresh oneself 提神；refresh memory 重拾记忆","movie":"《心灵奇旅》Music refreshes tired souls.","sentence":"A short walk can refresh your mind."},
+    {"word":"refusal","phonetic":"[rɪˈfju:zl]","meaning":"n.拒绝","collocation":"firm refusal 断然拒绝；the refusal of help 拒绝援助","movie":"《傲慢与偏见》Her refusal hurt his pride deeply.","sentence":"His refusal to cooperate delayed the project."},
+    {"word":"register","phonetic":"[ˈredʒɪstə(r)]","meaning":"n/v. 登记，注册；挂号","collocation":"register for class 选课注册；register hotel 酒店登记","movie":"《当幸福来敲门》He registered for the internship interview.","sentence":"Please register your name before entering the room."},
+    {"word":"regulate","phonetic":"[ˈregjuleɪt]","meaning":"v 控制；管理；调节","collocation":"regulate temperature 调节温度；regulate market 规范市场","movie":"《星际穿越》Machines regulate the farm’s water supply.","sentence":"Schools regulate students’ daily behavior."},
+    {"word":"reject","phonetic":"[rɪˈdʒekt]","meaning":"vt. 拒绝；摒弃","collocation":"reject bad habits 摒弃恶习；reject unfair offers 拒绝不公提议","movie":"《当幸福来敲门》He was rejected dozens of times but never quit.","sentence":"We should reject useless old ideas."},
+    {"word":"relatively","phonetic":"[ˈrelətɪvli]","meaning":"adv. 比较而言；相对地","collocation":"relatively cheap 相对便宜；relatively easy 相对简单","movie":"《阿甘正传》His later life was relatively peaceful.","sentence":"This task is relatively easy for experienced students."},
+    {"word":"release","phonetic":"[rɪˈli:s]","meaning":"vt/n.释放；发行,上映；发表","collocation":"release pressure 释放压力；release a film 上映电影","movie":"《肖申克的救赎》Andy finally released himself from prison.","sentence":"The writer will release a new novel next month."},
+    {"word":"relevant","phonetic":"[ˈreləvənt]","meaning":"adj.有关的；切题的","collocation":"relevant information 相关信息；relevant to the topic 贴合主题","movie":"《十二怒汉》All clues relevant to the case must be checked.","sentence":"Write only content relevant to your essay title."},
+    {"word":"reliable","phonetic":"[rɪˈlaɪəbl]","meaning":"adj.可靠的","collocation":"reliable friend 靠谱好友；reliable data 可靠数据","movie":"《泰坦尼克号》Jack was a reliable person Rose could trust.","sentence":"This old brand makes reliable electronic products."},
+    {"word":"relief","phonetic":"[rɪˈli:f]","meaning":"n.减轻，解除；救济","collocation":"sense of relief 释然；relief fund 救济金","movie":"《当幸福来敲门》He felt huge relief after getting the job.","sentence":"Medicine brings quick relief to your pain."},
+    {"word":"relieve","phonetic":"[rɪˈli:v]","meaning":"vt.减轻；使宽慰；救济","collocation":"relieve stress 缓解压力；relieve poor families 救济贫困家庭","movie":"《绿皮书》Kind words relieved his loneliness.","sentence":"Hot tea can relieve your sore throat."},
+    {"word":"reluctant","phonetic":"[rɪˈlʌktənt]","meaning":"adj.不情愿的；勉强的","collocation":"be reluctant to leave 不愿离开；reluctant agreement 勉强同意","movie":"《泰坦尼克号》Rose was reluctant to leave Jack on the door.","sentence":"He was reluctant to give up his favorite hobby."},
+    {"word":"remark","phonetic":"[rɪˈmɑ:k]","meaning":"vt. 谈论,评论；说 n.话语；评论","collocation":"make a remark 发表评论；casual remark 随口评价","movie":"《傲慢与偏见》He made a cold remark about Elizabeth at first.","sentence":"The teacher made a kind remark on my essay."},
+    {"word":"remarkable","phonetic":"[rɪˈmɑ:kəbl]","meaning":"adj.显著的，非凡的","collocation":"remarkable achievement 卓越成就；remarkable progress 巨大进步","movie":"《阿甘正传》His running story was truly remarkable.","sentence":"She made remarkable progress in English this term."},
+    {"word":"remote","phonetic":"[rɪˈməʊt]","meaning":"adj. 遥远的；偏僻的","collocation":"remote village 偏远村庄；remote planet 遥远星球","movie":"《星际穿越》They traveled to a remote ice planet.","sentence":"The small town is remote from big cities."},
+    {"word":"remove","phonetic":"[rɪˈmu:v]","meaning":"vt.移开；除去；去掉","collocation":"remove rubbish 清理垃圾；remove stress 消除压力","movie":"《肖申克的救赎》He removed stones little by little every night.","sentence":"Please remove all useless words from your composition."},
+    {"word":"represent","phonetic":"[ˌreprɪˈzent]","meaning":"vt. 代表","collocation":"represent the class 代表班级；represent national culture 代表民族文化","movie":"《摔跤吧爸爸》The girls represent their country in matches.","sentence":"Our monitor represents us to talk with teachers."},
+    {"word":"request","phonetic":"[rɪˈkwest]","meaning":"vt/n. 要求；请求","collocation":"make a request 提出请求；request help 请求帮助","movie":"《肖申克的救赎》Andy’s parole request was refused.","sentence":"I request extra time to finish my homework."},
+    {"word":"resemble","phonetic":"[rɪˈzembl]","meaning":"vt.与…相似；像","collocation":"resemble one’s mother 长得像妈妈；resemble each other 彼此相像","movie":"《哈利波特》Harry closely resembled his father.","sentence":"The twin brothers resemble each other very much."},
+    {"word":"reservation","phonetic":"[ˌrezəˈveɪʃn]","meaning":"n.保留；预定","collocation":"hotel reservation 酒店预订；without reservation 毫无保留","movie":"《泰坦尼克号》They had a dinner reservation on the ship.","sentence":"I made a flight reservation one week early."},
+    {"word":"reserve","phonetic":"[rɪˈzɜ:v]","meaning":"vt.保留；储备 n. 保护区","collocation":"reserve time 预留时间；nature reserve 自然保护区","movie":"《阿凡达》The forest is a sacred reserve for the Na’vi.","sentence":"Reserve a seat for your friend tonight."},
+    {"word":"residential","phonetic":"[ˌrezɪˈdenʃl]","meaning":"adj. 居住的","collocation":"residential area 居民区；residential building 居民楼","movie":"《楚门的世界》The whole town was a residential set.","sentence":"This street is a quiet residential zone."},
+    {"word":"resign","phonetic":"[rɪˈzaɪn]","meaning":"vi. 辞职","collocation":"resign from job 辞职；resign one’s position 辞去职位","movie":"《华尔街》He chose to resign after seeing unfair trade.","sentence":"She decided to resign and travel around the world."},
+    {"word":"resist","phonetic":"[rɪˈzɪst]","meaning":"v.抵抗；抵制","collocation":"resist temptation 抵制诱惑；resist pressure 顶住压力","movie":"《绿皮书》He resisted unfair racial rules bravely.","sentence":"It’s hard to resist delicious snacks at night."},
+    {"word":"resolution","phonetic":"[ˌrezəˈlu:ʃn]","meaning":"n.决心","collocation":"new year resolution 新年决心；strong resolution 坚定决心","movie":"《当幸福来敲门》His resolution to succeed never faded.","sentence":"My resolution is to read one book every month."},
+    {"word":"resolve","phonetic":"[rɪˈzɒlv]","meaning":"vt. 下决心；决定；解决","collocation":"resolve conflicts 化解矛盾；resolve to study hard 下决心努力学习","movie":"《十二怒汉》They resolved the case step by step.","sentence":"We need to resolve this problem today."},
+    {"word":"respond","phonetic":"[rɪˈspɒnd]","meaning":"vt.回答；回复；回应","collocation":"respond to questions 回答问题；respond to requests 回应请求","movie":"《泰坦尼克号》Rose responded to Jack’s love sincerely.","sentence":"Please respond to my message as soon as possible."},
+    {"word":"restoration","phonetic":"[ˌrestəˈreɪʃn]","meaning":"n. 恢复；修复","collocation":"restoration of old buildings 古建筑修复；restoration of health 身体康复","movie":"《泰坦尼克》Museums work on the restoration of ship relics.","sentence":"The restoration of the park will finish next month."},
+    {"word":"restore","phonetic":"[rɪˈstɔ:(r)]","meaning":"vt.恢复；修复；使恢复健康","collocation":"restore peace 恢复和平；restore broken furniture 修复破损家具","movie":"《肖申克的救赎》Time restored his hope for freedom.","sentence":"Good sleep restores your tired body."},
+    {"word":"restrict","phonetic":"[rɪˈstrɪkt]","meaning":"vt.限制；约束","collocation":"restrict spending 限制开销；restrict time 约束时间","movie":"《楚门的世界》The director restricted his freedom to travel.","sentence":"Parents restrict kids’ screen time every day."},
+    {"word":"reveal","phonetic":"[rɪˈvi:l]","meaning":"vt/n.揭示，揭露","collocation":"reveal the truth 揭露真相；reveal secret 泄露秘密","movie":"《肖申克的救赎》The storm revealed his hidden tunnel.","sentence":"The report reveals hidden social problems."},
+    {"word":"revenge","phonetic":"[rɪˈvendʒ]","meaning":"n.报仇 v. 为…报仇","collocation":"take revenge 复仇；seek revenge 寻求报复","movie":"《哈利波特》He did not seek revenge for his parents.","sentence":"Don’t act out of anger and revenge."},
+    {"word":"reverse","phonetic":"[rɪˈvɜ:s]","meaning":"adj.颠倒的；反向的 v.颠倒 n.相反；挫折","collocation":"reverse direction 反向；reverse a decision 推翻决定","movie":"《星际穿越》Time moves in reverse on that planet.","sentence":"We can reverse this wrong plan immediately."},
+    {"word":"review","phonetic":"[rɪˈvju:]","meaning":"v/n. 复习；审核；回顾；评论","collocation":"review lessons 复习功课；film review 影评","movie":"《死亡诗社》We review poetry together every afternoon.","sentence":"Review all knowledge before the final exam."},
+    {"word":"revise","phonetic":"[rɪˈvaɪz]","meaning":"vt.修订，校订；修正；复习","collocation":"revise composition 修改作文；revise notes 复习笔记","movie":"《心灵捕手》He revised his math theory many times.","sentence":"Revise your essay to cut redundant sentences."},
+    {"word":"revision","phonetic":"[rɪˈvɪʒn]","meaning":"n. 修订，校订；修正；复习","collocation":"revision time 复习时间；paper revision 文稿修改","movie":"《死亡诗社》The teacher gave us revision advice.","sentence":"Two hours of revision improves test scores a lot."},
+    {"word":"revolution","phonetic":"[ˌrevəˈlu:ʃn]","meaning":"n.革命","collocation":"industrial revolution 工业革命；social revolution 社会变革","movie":"《乔布斯》He led a tech revolution in mobile devices.","sentence":"The invention started a great revolution."},
+    {"word":"rhythm","phonetic":"[ˈrɪðəm]","meaning":"n.节奏；韵律","collocation":"music rhythm 音乐节奏；life rhythm 生活节奏","movie":"《爱乐之城》The jazz rhythm touched every audience.","sentence":"Read poems to feel their beautiful rhythm."},
+    {"word":"ridiculous","phonetic":"[rɪˈdɪkjələs]","meaning":"adj. 可笑的","collocation":"ridiculous idea 荒唐想法；ridiculous clothes 滑稽服装","movie":"《老友记》His ridiculous joke made everyone laugh.","sentence":"It’s ridiculous to give up before trying."},
+    {"word":"romantic","phonetic":"[rəʊˈmæntɪk]","meaning":"adj. 浪漫的","collocation":"romantic story 浪漫故事；romantic night 浪漫夜晚","movie":"《泰坦尼克号》It’s the most romantic film I’ve ever seen.","sentence":"The seaside sunset is extremely romantic."},
+    {"word":"rough","phonetic":"[rʌf]","meaning":"adj.粗糙的；粗略的；粗鲁的；有暴风雨的","collocation":"rough road 崎岖道路；rough plan 初步方案","movie":"《绿皮书》Tony had a rough but kind personality.","sentence":"Give me a rough idea of your travel plan."},
+    {"word":"routine","phonetic":"[ru:ˈti:n]","meaning":"n.例行公事；惯例 adj.例行的,常规的","collocation":"daily routine 日常作息；routine work 常规工作","movie":"《肖申克的救赎》Prison life followed a strict routine.","sentence":"Stick to a study routine every morning."},
+    {"word":"rural","phonetic":"[ˈrʊərəl]","meaning":"adj. 农村的；田园的","collocation":"rural area 乡村地区；rural life 田园生活","movie":"《阿甘正传》He grew up in a quiet rural town.","sentence":"Many young people go back to develop rural villages."},
+    {"word":"sacrifice","phonetic":"[ˈsækrɪfaɪs]","meaning":"n/vt. 牺牲；献祭","collocation":"sacrifice time 牺牲时间；sacrifice for family 为家人付出","movie":"《泰坦尼克号》Jack sacrificed himself to save Rose.","sentence":"Parents often sacrifice their own happiness for kids."},
+    {"word":"sample","phonetic":"[ˈsɑ:mpl]","meaning":"n.样品，标本；实例","collocation":"product sample 产品样品；water sample 水样","movie":"《火星救援》He sent plant samples back to earth.","sentence":"The shop gives free food samples to customers."},
+    {"word":"scan","phonetic":"[skæn]","meaning":"vt./n. 快读；扫描","collocation":"scan the article 快速浏览文章；scan files 扫描文件","movie":"《碟中谍》The machine scans all faces quickly.","sentence":"Scan the text first before careful reading."},
+    {"word":"scarce","phonetic":"[skeəs]","meaning":"adj. 缺乏的；稀有的","collocation":"scarce resource 稀缺资源；scarce water 缺水","movie":"《星际穿越》Food became scarce on dry earth.","sentence":"Fresh fruit is scarce in cold winter."},
+    {"word":"scarcely","phonetic":"[ˈskeəsli]","meaning":"adv. 几乎不；刚刚；才","collocation":"scarcely enough 勉强够用；scarcely speak 几乎说不出话","movie":"《当幸福来敲门》He scarcely had money for bread.","sentence":"I scarcely caught the last subway train."},
+    {"word":"secure","phonetic":"[sɪˈkjʊə(r)]","meaning":"adj. 安全的 vt. 保卫","collocation":"secure environment 安全环境；secure safety 保障安全","movie":"《肖申克的救赎》He finally felt secure after escaping.","sentence":"Lock the door to keep your home secure."},
+    {"word":"security","phonetic":"[sɪˈkjʊərəti]","meaning":"n.安全","collocation":"personal security 人身安全；public security 公共安全","movie":"《碟中谍》The team’s top task is national security.","sentence":"We care about the security of students at school."},
+    {"word":"seek","phonetic":"[si:k]","meaning":"(sought, sought) vt.寻找","collocation":"seek help 寻求帮助；seek truth 探寻真相","movie":"《当幸福来敲门》He sought every chance to change his life.","sentence":"Many people seek happiness all their lives."},
+    {"word":"sensible","phonetic":"[ˈsensəbl]","meaning":"adj.明智的；合情理的","collocation":"sensible choice 明智选择；sensible advice 中肯建议","movie":"《傲慢与偏见》Elizabeth gave sensible judgments.","sentence":"It’s sensible to take an umbrella today."},
+    {"word":"sensitive","phonetic":"[ˈsensətɪv]","meaning":"adj. 敏感的；体贴的","collocation":"sensitive to cold 怕冷；sensitive mood 敏感情绪","movie":"《绿皮书》Dr. Shirley was sensitive to unfair words.","sentence":"Kids are sensitive to parents’ words."},
+    {"word":"separate","phonetic":"[ˈseprət]","meaning":"adj.分开的；各自的 vt.使分开","collocation":"separate waste 垃圾分类；separate two teams 分开两队","movie":"《爱乐之城》They had to separate for their dreams.","sentence":"We separate good apples from bad ones."},
+    {"word":"setting","phonetic":"[ˈsetɪŋ]","meaning":"n. （小说等的）背景","collocation":"story setting 故事背景；village setting 乡村背景","movie":"《哈利波特》Hogwarts is the main setting of the story.","sentence":"The novel’s setting is a small coastal town."},
+    {"word":"shame","phonetic":"[ʃeɪm]","meaning":"n.遗憾的事；羞耻,耻辱","collocation":"feel shame 感到羞愧；a shame 一件憾事","movie":"《绿皮书》It’s a shame people judge by skin color.","sentence":"What a shame you missed the wonderful show!"},
+    {"word":"sharp","phonetic":"[ʃɑ:p]","meaning":"adj.锋利的；急转向的; 敏锐的, 鲜明的","collocation":"sharp knife 锋利小刀；sharp eyes 敏锐双眼","movie":"《十二怒汉》He had sharp observation of all clues.","sentence":"The sharp wind hurt my face this morning."},
+    {"word":"shift","phonetic":"[ʃɪft]","meaning":"n. 转换；轮班 vt. 转换","collocation":"shift attention 转移注意力；night shift 夜班","movie":"《华尔街》The market shift changed businessmen’s plans.","sentence":"We need to shift our plan to fit new rules."},
+    {"word":"shock","phonetic":"[ʃɒk]","meaning":"n.冲击；震惊；休克 vt.使震惊","collocation":"cultural shock 文化冲击；shock everyone 震惊众人","movie":"《泰坦尼克号》People were shocked by the sinking ship.","sentence":"The bad news shocked the whole class."},
+    {"word":"shortcut","phonetic":"['ʃɔ:tkʌt]","meaning":"n.近路；捷径","collocation":"take a shortcut 走捷径；no shortcut to success 成功无捷径","movie":"《阿甘正传》There is no shortcut to real happiness.","sentence":"There are no shortcuts to learning English well."},
+    {"word":"shrink","phonetic":"[ʃrɪŋk]","meaning":"vi.收缩；退缩","collocation":"shrink in cold 遇冷收缩；shrink from difficulties 畏惧困难","movie":"《哈利波特》The magic cloth shrank suddenly.","sentence":"Wool clothes may shrink in hot water."},
+    {"word":"significant","phonetic":"[sɪgˈnɪfɪkənt]","meaning":"adj. 重要的；有重大意义的","collocation":"significant change 重大变化；significant progress 长足进步","movie":"《肖申克的救赎》That night was a significant turning point.","sentence":"This exam has a significant influence on your future."},
+    {"word":"simplify","phonetic":"[ˈsɪmplɪfaɪ]","meaning":"vt.简化；使简易","collocation":"simplify steps 简化步骤；simplify sentences 简化句子","movie":"《心灵捕手》He simplified complex math formulas.","sentence":"We simplify the rules for new students."},
+    {"word":"simply","phonetic":"[ˈsɪmpli]","meaning":"adv.仅仅；简单地；简直","collocation":"simply put 简单来说；simply amazing 简直太棒了","movie":"《阿甘正传》He simply kept running every day.","sentence":"I simply want a quiet weekend at home."},
+    {"word":"skim","phonetic":"[skɪm]","meaning":"vt. 浏览；略读","collocation":"skim the passage 略读短文；skim through books 快速翻书","movie":"《死亡诗社》Skim first, then read carefully.","sentence":"I skim the newspaper while eating breakfast."},
+    {"word":"skip","phonetic":"[skɪp]","meaning":"vt. 跳过，略过；漏过","collocation":"skip difficult words 跳过难词；skip classes 逃课","movie":"《老友记》Don’t skip important parts of the story.","sentence":"Skip the boring part and read the ending."},
+    {"word":"slight","phonetic":"[slaɪt]","meaning":"adj. 轻微的；少量的","collocation":"slight mistake 小失误；slight pain 轻微疼痛","movie":"《泰坦尼克号》He had a slight wound on his arm.","sentence":"There is a slight difference between the two words."},
+    {"word":"smooth","phonetic":"[smu:ð]","meaning":"adj.平滑的；平稳的；顺利的","collocation":"smooth road 平坦道路；smooth progress 顺利进展","movie":"《爱乐之城》Their dance movements were smooth and beautiful.","sentence":"The project went smooth without big trouble."},
+    {"word":"sociable","phonetic":"[ˈsəʊʃəbl]","meaning":"adj.（好）交际的；社交的","collocation":"sociable person 善于交际的人；sociable activity 社交活动","movie":"《老友记》Rachel is warm and sociable.","sentence":"Sociable kids make more friends easily."},
+    {"word":"specific","phonetic":"[spəˈsɪfɪk]","meaning":"adj. 明确的；具体的；特定的","collocation":"specific requirement 具体要求；specific time 特定时间","movie":"《十二怒汉》Give specific proof instead of guesses.","sentence":"Please tell me your specific plan."},
+    {"word":"spiritual","phonetic":"[ˈspɪrɪtʃuəl]","meaning":"adj.精神上的","collocation":"spiritual wealth 精神财富；spiritual comfort 心灵慰藉","movie":"《肖申克的救赎》Hope is his spiritual support.","sentence":"Reading brings us great spiritual joy."},
+    {"word":"splendid","phonetic":"[ˈsplendɪd]","meaning":"adj. 壮丽的；辉煌的；极好的","collocation":"splendid view 壮丽景色；splendid performance 精彩演出","movie":"《泰坦尼克号》The ship’s hall was splendid at night.","sentence":"We had a splendid holiday by the sea."},
+    {"word":"spoil","phonetic":"[spɔɪl]","meaning":"vt.破坏；糟蹋；宠坏；变质","collocation":"spoil the party 破坏派对；spoil children 溺爱孩子","movie":"《阿甘正传》Rain spoiled their picnic plan.","sentence":"Don’t spoil the kids by buying everything they want."},
+    {"word":"sponsor","phonetic":"[ˈspɒnsə(r)]","meaning":"vt.主办，赞助 n. 赞助商；主办者","collocation":"sponsor the activity 赞助活动；main sponsor 主赞助商","movie":"《当幸福来敲门》A big company sponsored his training course.","sentence":"Local shops sponsor our school sports meet."},
+    {"word":"stable","phonetic":"[ˈsteɪbl]","meaning":"adj.稳定的；稳固的","collocation":"stable life 安稳生活；stable price 稳定价格","movie":"《绿皮书》He wanted a stable peaceful life.","sentence":"A stable mood helps you study better."},
+    {"word":"steady","phonetic":"[ˈstedi]","meaning":"adj.稳的；稳定的","collocation":"steady speed 匀速；steady growth 稳步增长","movie":"《阿甘正传》His steady running won respect.","sentence":"Keep a steady pace when jogging."},
+    {"word":"stimulate","phonetic":"[ˈstɪmjuleɪt]","meaning":"vt.激励；刺激","collocation":"stimulate interest 激发兴趣；stimulate growth 促进增长","movie":"《心灵奇旅》Music stimulates people’s love for life.","sentence":"Good teachers stimulate students’ curiosity."},
+    {"word":"strategy","phonetic":"[ˈstrætədʒi]","meaning":"n. 战略；策略","collocation":"learning strategy 学习策略；business strategy 商业策略","movie":"《肖申克的救赎》His escape strategy took years to finish.","sentence":"You need a clear study strategy for exams."},
+    {"word":"stress","phonetic":"[stres]","meaning":"n.压力；紧张 vt.强调","collocation":"under stress 承受压力；stress the importance 强调重要性","movie":"《当幸福来敲门》He lived under great financial stress.","sentence":"Teachers stress the importance of reading every day."},
+    {"word":"strike","phonetic":"[straɪk]","meaning":"(struck, struck) v.敲,打,击；袭击 n. 罢工","collocation":"strike the door 敲门；strike disaster 遭遇灾难","movie":"《泰坦尼克号》The iceberg struck the ship at midnight.","sentence":"Lightning struck the tall tree last night."},
+    {"word":"strive","phonetic":"[straɪv]","meaning":"vi.努力；奋斗","collocation":"strive for dreams 为梦想奋斗；strive for progress 力求进步","movie":"《当幸福来敲门》He strived every single day for his son.","sentence":"Strive hard and you will achieve your goals."},
+    {"word":"structure","phonetic":"[ˈstrʌktʃə(r)]","meaning":"n. 结构；构造","collocation":"sentence structure 句子结构；building structure 建筑结构","movie":"《美丽心灵》He studied the structure of math formulas.","sentence":"The book has a clear chapter structure."},
+    {"word":"stylish","phonetic":"[ˈstaɪlɪʃ]","meaning":"adj.流行的；时髦的","collocation":"stylish clothes 时髦服装；stylish design 时尚设计","movie":"《爱乐之城》Mia wore stylish dresses every day.","sentence":"Her new coat looks very stylish."},
+    {"word":"subconscious","phonetic":"[ˌsʌbˈkɒnʃəs]","meaning":"adj.潜意识的 n. 潜意识","collocation":"subconscious mind 潜意识；subconscious thought 下意识想法","movie":"《盗梦空间》Our subconscious creates strange dreams.","sentence":"Fear often hides in your subconscious."},
+    {"word":"subjective","phonetic":"[səbˈdʒektɪv]","meaning":"adj.主观的","collocation":"subjective opinion 主观看法；subjective feeling 主观感受","movie":"《十二怒汉》Don’t judge with only subjective feeling.","sentence":"Your taste in movies is very subjective."},
+    {"word":"substance","phonetic":"[ˈsʌbstəns]","meaning":"n.物质，材料","collocation":"solid substance 固体物质；valuable substance 珍贵材料","movie":"《星际穿越》The planet lacked water and useful substances.","sentence":"Soil is an important natural substance."},
+    {"word":"substitute","phonetic":"[ˈsʌbstɪtju:t]","meaning":"vt.用…代替 n.代替者（物）","collocation":"substitute A for B 用A替代B；substitute teacher 代课老师","movie":"《哈利波特》He used a stone as a substitute for a ball.","sentence":"Milk can be a substitute for yogurt."},
+    {"word":"sufficient","phonetic":"[səˈfɪʃnt]","meaning":"adj.充足的，足够的","collocation":"sufficient time 充足时间；sufficient money 足够资金","movie":"《当幸福来敲门》He had no sufficient money for rent.","sentence":"We have sufficient books for all students."},
+    {"word":"summary","phonetic":"[ˈsʌməri]","meaning":"n.摘要；总结","collocation":"short summary 简短总结；write a summary 写摘要","movie":"《十二怒汉》The jury gave a clear case summary.","sentence":"Write a summary after reading each article."},
+    {"word":"superior","phonetic":"[su:ˈpɪəriə(r)]","meaning":"adj.较好的; 上级的 n.上级；长辈","collocation":"superior quality 优质；superior officer 上级官员","movie":"《绿皮书》He never thought he was superior to others.","sentence":"This new model is superior to the old one."},
+    {"word":"supervise","phonetic":"[ˈsu:pəvaɪz]","meaning":"v.监督；管理；指导","collocation":"supervise work 监督工作；supervise kids 看管孩子","movie":"《肖申克的救赎》The warden supervised all prisoners.","sentence":"Teachers supervise students during self-study."},
+    {"word":"surround","phonetic":"[səˈraʊnd]","meaning":"vt.包围，围绕","collocation":"surround with trees 绿树环绕；surround by friends 被朋友围绕","movie":"《阿凡达》Tall trees surrounded their village.","sentence":"High mountains surround the small town."},
+    {"word":"suspect","phonetic":"[səˈspekt]","meaning":"vt.怀疑  n.嫌疑犯","collocation":"suspect a lie 怀疑谎言；main suspect 主要嫌疑人","movie":"《十二怒汉》No one suspected the real truth at first.","sentence":"I suspect he forgot our appointment."},
+    {"word":"suspicion","phonetic":"[səˈspɪʃn]","meaning":"n.怀疑","collocation":"have suspicion 心存怀疑；arouse suspicion 引起怀疑","movie":"《控方证人》His strange behavior raised everyone’s suspicion.","sentence":"There is strong suspicion about his words."},
+    {"word":"switch","phonetic":"[swɪtʃ]","meaning":"vi/n. 开关；转换","collocation":"switch on 打开；switch plans 更换方案","movie":"《楚门的世界》The director switched the camera angle.","sentence":"Switch to another channel for the news."},
+    {"word":"symbolic","phonetic":"[sɪmˈbɒlɪk]","meaning":"adj.象征的","collocation":"symbolic meaning 象征意义；symbolic action 象征性举动","movie":"《泰坦尼克号》The floating door is symbolic of hope.","sentence":"The dove is symbolic of peace."},
+    {"word":"symbolize","phonetic":"[ˈsɪmbəlaɪz]","meaning":"vt.象征","collocation":"symbolize love 象征爱情；symbolize freedom 象征自由","movie":"《肖申克的救赎》The small hammer symbolizes persistence.","sentence":"Red flowers symbolize warm passion."},
+    {"word":"sympathetic","phonetic":"[ˌsɪmpəˈθetɪk]","meaning":"adj.同情的","collocation":"sympathetic heart 同情心；feel sympathetic 心生怜悯","movie":"《绿皮书》He became sympathetic to black people’s pain.","sentence":"I feel sympathetic for homeless kids."},
+    {"word":"sympathy","phonetic":"[ˈsɪmpəθi]","meaning":"n. 同情","collocation":"express sympathy 表达同情；win sympathy 获得同情","movie":"《海边曼彻斯特》People felt deep sympathy for him.","sentence":"We show sympathy to those in trouble."},
+    {"word":"symptom","phonetic":"[ˈsɪmptəm]","meaning":"n.症状","collocation":"illness symptom 病症；early symptom 早期症状","movie":"《传染病》Fever is the main symptom of the disease.","sentence":"Headache is a common cold symptom."},
+    {"word":"talkative","phonetic":"[ˈtɔ:kətɪv]","meaning":"adj. 好说话的；健谈的","collocation":"talkative girl 健谈女孩；become talkative 变得爱说话","movie":"《老友记》Phoebe is warm and talkative.","sentence":"My deskmate is friendly and talkative."},
+    {"word":"target","phonetic":"[ˈtɑ:gɪt]","meaning":"n.目标;对象  vt.把…作为目标","collocation":"reach the target 达成目标；target customers 目标客户","movie":"《摔跤吧爸爸》Her target was the national champion.","sentence":"Set a clear learning target every month."},
+    {"word":"temporary","phonetic":"[ˈtemprəri]","meaning":"adj.暂时的；临时的","collocation":"temporary job 临时工；temporary shelter 临时住所","movie":"《当幸福来敲门》They lived in a temporary shelter for weeks.","sentence":"This is only a temporary solution to the problem."},
+    {"word":"tempt","phonetic":"[tempt]","meaning":"vt.吸引；引诱","collocation":"tempt sb to do 引诱某人做；tempting food 诱人食物","movie":"《阿甘正传》Chocolate tempts him every day.","sentence":"Don’t be tempted by short-term fun."},
+    {"word":"tendency","phonetic":"[ˈtendənsi]","meaning":"n.趋势；倾向","collocation":"a rising tendency 上升趋势；natural tendency 自然倾向","movie":"《星际穿越》The planet has a tendency to dry up.","sentence":"Kids have a tendency to play after class."},
+    {"word":"tense","phonetic":"[tens]","meaning":"adj.紧张的 n.时态","collocation":"tense atmosphere 紧张气氛；past tense 过去时态","movie":"《十二怒汉》The room stayed tense all night.","sentence":"Everyone felt tense before the exam."},
+    {"word":"tension","phonetic":"[ˈtenʃn]","meaning":"n.紧张","collocation":"release tension 释放紧张；emotional tension 情绪紧绷","movie":"《绿皮书》Racial tension filled many public places.","sentence":"Exercise can ease mental tension."},
+    {"word":"theme","phonetic":"[θi:m]","meaning":"n.题目；主题","collocation":"main theme 核心主题；theme song 主题曲","movie":"《爱乐之城》The theme of the film is dreams and regret.","sentence":"What is the theme of your composition?"},
+    {"word":"therapy","phonetic":"[ˈθerəpi]","meaning":"n.疗法；治疗","collocation":"physical therapy 理疗；speech therapy 言语治疗","movie":"《心灵捕手》He received long-term mental therapy.","sentence":"Music therapy calms anxious people."},
+    {"word":"thorough","phonetic":"[ˈθʌrə]","meaning":"adj.彻底的；完全的","collocation":"thorough cleaning 彻底打扫；thorough research 全面调研","movie":"《十二怒汉》He made a thorough check of all clues.","sentence":"Do a thorough review before exams."},
+    {"word":"tough","phonetic":"[tʌf]","meaning":"adj. 坚韧的；棘手的；艰巨的","collocation":"tough task 艰巨任务；tough competition 激烈竞争","movie":"《当幸福来敲门》Life was tough but he never gave up.","sentence":"This math problem is really tough for beginners."},
+    {"word":"track","phonetic":"[træk]","meaning":"n. 踪迹；足迹；vt.追踪","collocation":"track down 追踪找到；keep track of 记录","movie":"《荒野生存》He tracked animals in the wild forest.","sentence":"Police tracked the thief for three days."},
+    {"word":"tragedy","phonetic":"[ˈtrædʒədi]","meaning":"n.悲剧","collocation":"personal tragedy 个人悲剧；national tragedy 国家惨剧","movie":"《泰坦尼克号》The sinking ship is a great tragedy.","sentence":"The story ends with a sad tragedy."},
+    {"word":"tragic","phonetic":"[ˈtrædʒɪk]","meaning":"adj.悲剧的","collocation":"tragic ending 悲惨结局；tragic fate 悲惨命运","movie":"《海边曼彻斯特》His life had many tragic moments.","sentence":"The novel tells a tragic love story."},
+    {"word":"transfer","phonetic":"[trænsˈfɜ:(r)]","meaning":"v. 转移；调动","collocation":"transfer school 转学；transfer money 转账","movie":"《绿皮书》He transferred to another city for work.","sentence":"I will transfer to a new class next term."},
+    {"word":"transform","phonetic":"[trænsˈfɔ:m]","meaning":"vt.改造；使改变性质","collocation":"transform life 改变生活；transform waste 改造废料","movie":"《阿甘正传》Running transformed his whole life.","sentence":"Hard work can transform a lazy student."},
+    {"word":"translate","phonetic":"[trænsˈleɪt]","meaning":"v. 转变","collocation":"translate words 翻译文字；translate dreams into action 将梦想付诸行动","movie":"《心灵捕手》He translated complex math into simple words.","sentence":"Please translate this English sentence into Chinese."},
+    {"word":"tremendous","phonetic":"[trəˈmendəs]","meaning":"adj.极大的,巨大的","collocation":"tremendous pressure 巨大压力；tremendous progress 巨大进步","movie":"《泰坦尼克号》The ship carried a tremendous number of passengers.","sentence":"He made tremendous progress in one year."},
+    {"word":"trend","phonetic":"[trend]","meaning":"n.趋势；倾向","collocation":"market trend 市场趋势；current trend 当下潮流","movie":"《华尔街》The economic trend changed quickly.","sentence":"Online study is a new learning trend."},
+    {"word":"trick","phonetic":"[trɪk]","meaning":"n.诡计,戏法,恶作剧 vt. 欺诈","collocation":"play a trick 恶作剧；trick sb into lying 哄骗某人撒谎","movie":"《哈利波特》He used a magic trick to escape.","sentence":"Don’t trust his tricks easily."},
+    {"word":"typical","phonetic":"[ˈtɪpɪkl]","meaning":"adj.典型的；有代表性的","collocation":"typical example 典型例子；typical style 典型风格","movie":"《阿甘正传》He is a typical kind ordinary man.","sentence":"This is a typical spring rain scene."},
+    {"word":"undergo","phonetic":"[ˌʌndəˈgəʊ]","meaning":"vt.经受；经历；遭受","collocation":"undergo hardship 历经苦难；undergo training 接受培训","movie":"《肖申克的救赎》He underwent 19 years of prison life.","sentence":"All athletes undergo strict training."},
+    {"word":"undertake","phonetic":"[ˌʌndəˈteɪk]","meaning":"vt.接受；承担","collocation":"undertake a task 承担任务；undertake responsibility 担起责任","movie":"《火星救援》He undertook the hard farm work on Mars.","sentence":"I undertake to finish the work before Friday."},
+    {"word":"unimaginable","phonetic":"[ˌʌnɪˈmædʒɪnəbl]","meaning":"adj.无法想象的","collocation":"unimaginable pain 难以想象的痛苦；unimaginable wealth 巨额财富","movie":"《星际穿越》The disaster brought unimaginable loss.","sentence":"The pain of losing family is unimaginable."},
+    {"word":"unique","phonetic":"[juˈni:k]","meaning":"adj.独特的；独一无二的","collocation":"unique culture 独特文化；unique gift 独一无二的礼物","movie":"《泰坦尼克号》Their love story is unique in film history.","sentence":"Every person has unique shining points."},
+    {"word":"universal","phonetic":"[ˌju:nɪˈvɜ:sl]","meaning":"adj.普遍的；全世界的","collocation":"universal rule 通用法则；universal value 普世价值","movie":"《阿甘正传》Hope is a universal feeling for all people.","sentence":"The need for love is universal for humans."},
+    {"word":"urban","phonetic":"[ˈɜ:bən]","meaning":"adj.城市的","collocation":"urban area 城区；urban traffic 城市交通","movie":"《当幸福来敲门》He struggled in busy urban streets.","sentence":"Urban pollution needs more attention."},
+    {"word":"urge","phonetic":"[ɜ:dʒ]","meaning":"vt.催促；鼓励","collocation":"urge sb to study 催促某人学习；urge action 敦促行动","movie":"《永不妥协》She urged villagers to protect their rights.","sentence":"I urge you to finish your homework early."},
+    {"word":"urgent","phonetic":"[ˈɜ:dʒənt]","meaning":"adj.紧急的；急迫的","collocation":"urgent matter 急事；urgent call 紧急电话","movie":"《泰坦尼克号》The captain received an urgent ice warning.","sentence":"We have an urgent meeting right now."},
+    {"word":"vague","phonetic":"[veɪg]","meaning":"adj.模糊不清的；不明确的","collocation":"vague memory 模糊记忆；vague answer 含糊答复","movie":"《十二怒汉》His witness statement was vague and unreliable.","sentence":"I only have a vague idea of the plan."},
+    {"word":"vary","phonetic":"[ˈveəri]","meaning":"v.(使)变化","collocation":"vary with seasons 随季节变化；vary in size 大小不一","movie":"《爱乐之城》People’s dreams vary from each other.","sentence":"Prices vary in different shops."},
+    {"word":"vigour","phonetic":"['vɪgə]","meaning":"n.精力，活力","collocation":"full of vigour 充满活力；youthful vigour 青春活力","movie":"《阿甘正传》He ran with endless vigour.","sentence":"Morning sports fill you with vigour."},
+    {"word":"vigorous","phonetic":"[ˈvɪgərəs]","meaning":"adj. 精力充沛的；充满活力的","collocation":"vigorous exercise 剧烈运动；vigorous debate 激烈讨论","movie":"《摔跤吧爸爸》The girls made vigorous training every day.","sentence":"Vigorous reading improves your memory."},
+    {"word":"violent","phonetic":"[ˈvaɪələnt]","meaning":"adj.暴力的；剧烈的；激烈的","collocation":"violent storm 狂风暴雨；violent conflict 暴力冲突","movie":"《阿凡达》The war was violent and cruel.","sentence":"A violent wind broke many tree branches."},
+    {"word":"vision","phonetic":"[ˈvɪʒn]","meaning":"n. 视力；视觉；幻想；远见","collocation":"clear vision 清晰视野；long-term vision 长远眼光","movie":"《美丽心灵》He had a strange vision of numbers.","sentence":"Good leaders have far-sighted vision."},
+    {"word":"visual","phonetic":"[ˈvɪʒuəl]","meaning":"adj. 视觉的","collocation":"visual effect 视觉效果；visual memory 视觉记忆","movie":"《哈利波特》The magic world has amazing visual scenes.","sentence":"Visual materials help learn words faster."},
+    {"word":"vital","phonetic":"[ˈvaɪtl]","meaning":"adj. 极重要的；有生命的","collocation":"vital information 关键信息；vital to life 生命必需","movie":"《星际穿越》Water is vital to all living things.","sentence":"Sleep is vital for your health."},
+    {"word":"vitality","phonetic":"[vaɪˈtæləti]","meaning":"n.活力；精力","collocation":"full of vitality 充满生机；youth vitality 青春活力","movie":"《心灵奇旅》Every little life has bright vitality.","sentence":"Children are full of natural vitality."},
+    {"word":"vivid","phonetic":"[ˈvɪvɪd]","meaning":"adj.生动的, 逼真的","collocation":"vivid description 生动描写；vivid memory 清晰回忆","movie":"《泰坦尼克号》He kept a vivid memory of that night.","sentence":"The writer paints a vivid picture of the countryside."},
+    {"word":"voluntary","phonetic":"[ˈvɒləntri]","meaning":"adj.志愿的","collocation":"volunteer work 志愿工作；voluntary donation 自愿捐款","movie":"《阿甘正传》He did voluntary running for charity.","sentence":"Many students take voluntary after-school service."},
+    {"word":"wisdom","phonetic":"[ˈwɪzdəm]","meaning":"n.智慧，明智；学问","collocation":"ancient wisdom 古老智慧；words of wisdom 至理名言","movie":"《肖申克的救赎》Hope is a kind of great wisdom.","sentence":"Reading brings us endless wisdom."},
+    {"word":"withdraw","phonetic":"[wɪðˈdrɔ:]","meaning":"vt. 收回；提取；撤退","collocation":"withdraw money 取钱；withdraw from competition 退出比赛","movie":"《泰坦尼克号》He withdrew from the dangerous boat to save Rose.","sentence":"You can withdraw cash from the bank card."},
+    {"word":"wonder","phonetic":"[ˈwʌndə(r)]","meaning":"v.感到惊讶；想知道 n.奇迹","collocation":"wonder about the future 好奇未来；a wonder of nature 自然奇观","movie":"《阿甘正传》I wonder where Jenny will go next.","sentence":"We wonder what the exam will cover."}
+];
+
+// 初始化字母栏
+function initAlpha() {
+    const box = document.getElementById('alphaBox');
+    box.innerHTML = '';
+    const allAlpha = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(let a of allAlpha) {
+        const btn = document.createElement('button');
+        btn.className = 'alphabet-btn';
+        btn.textContent = a;
+        btn.onclick = ()=>filterByAlpha(a);
+        box.appendChild(btn);
+    }
+}
+
+// 按首字母筛选
+function filterByAlpha(alpha) {
+    let arr;
+    if(alpha === '#') arr = [...wordList];
+    else arr = wordList.filter(item=>item.word[0].toUpperCase() === alpha);
+    renderList(arr);
+}
+
+// 渲染单词列表 修复滚动逻辑，找不到卡片不再阻塞渲染
+function renderList(arr) {
+    const wrap = document.getElementById('wordContainer');
+    wrap.innerHTML = '';
+    arr.forEach((item, idx)=>{
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.dataset.index = wordList.indexOf(item);
+        card.innerHTML = `
+            <div class="word-title">${item.word}</div>
+            <div class="phonetic">${item.phonetic}</div>
+            <div class="item-title">释义</div>
+            <div class="word-mean ${isHide ? 'hide-content' : ''}">${item.meaning}</div>
+            <div class="item-title">搭配</div>
+            <div class="word-collocation ${isHide ? 'hide-content' : ''}">${item.collocation}</div>
+            <div class="item-title">影视原句</div>
+            <div class="word-movie ${isHide ? 'hide-content' : ''}">${item.movie}</div>
+            <div class="item-title">例句</div>
+            <div class="word-sentence ${isHide ? 'hide-content' : ''}">${item.sentence}</div>
+        `;
+        wrap.appendChild(card);
+    })
+    // 仅当存在有效卡片时滚动
+    const targetCard = document.querySelector(`.word-card[data-index="${currentShowIndex}"]`);
+    if(targetCard) {
+        targetCard.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+}
+
+// 修复隐藏切换：只修改当前卡片，全局CSS变量移出JS字符串避免报错
+document.getElementById('toggleHide').onclick = function() {
+    const card = document.querySelector(`.word-card[data-index="${currentShowIndex}"]`);
+    if(!card) return alert("请先使用随机/查询加载单词");
+    isHide = !isHide;
+    const areas = card.querySelectorAll('.word-mean,.word-collocation,.word-movie,.word-sentence');
+    areas.forEach(el=>{
+        if(isHide) el.classList.add('hide-content');
+        else el.classList.remove('hide-content');
+    })
+}
+
+// 随机单词
+document.getElementById('randomBtn').onclick = function() {
+    const randIdx = Math.floor(Math.random() * wordList.length);
+    currentShowIndex = randIdx;
+    renderList([wordList[randIdx]]);
+}
+
+// 查询单词
+document.getElementById('searchBtn').onclick = function() {
+    const key = document.getElementById('searchInput').value.trim().toLowerCase();
+    if(!key) return alert("请输入单词");
+    const res = wordList.filter(item=>item.word.toLowerCase().includes(key));
+    if(res.length ===0) return alert("未找到匹配单词");
+    currentShowIndex = wordList.indexOf(res[0]);
+    renderList(res);
+}
+document.getElementById('searchInput').onkeydown = e=>{
+    if(e.key === 'Enter') document.getElementById('searchBtn').click();
+}
+
+// 深色模式
+document.getElementById('darkBtn').onclick = function() {
+    document.body.classList.toggle('dark');
+}
+
+// 标签切换
+document.querySelectorAll('.tab').forEach(tab=>{
+    tab.onclick = function() {
+        const target = this.dataset.tab;
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.page-box').forEach(p=>p.classList.remove('active'));
+        document.getElementById(`page-${target}`).classList.add('active');
+    }
+})
+
+// ====================== 默写打卡逻辑（修复CSS变量JS报错）=====================
+const CLOCK_KEY = "wordClockData";
+function getClockData() {
+    const raw = localStorage.getItem(CLOCK_KEY);
+    return raw ? JSON.parse(raw) : {
+        todayDate: "",
+        target: 10,
+        done: [],
+        totalDays: 0
+    }
+}
+function saveClockData(data) {
+    localStorage.setItem(CLOCK_KEY, JSON.stringify(data));
+}
+function getTodayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+function refreshClockStat() {
+    const data = getClockData();
+    document.getElementById('targetNum').textContent = data.target;
+    document.getElementById('doneNum').textContent = data.done.length;
+    document.getElementById('totalClock').textContent = data.totalDays;
+}
+document.getElementById('genClockBtn').onclick = function() {
+    const data = getClockData();
+    const today = getTodayStr();
+    const target = Number(document.getElementById('dayCountSelect').value);
+    if(data.today !== today) {
+        data.todayDate = today;
+        data.target = target;
+        data.done = [];
+        data.totalDays +=1;
+        saveClockData(data);
+    }
+    renderMemList();
+}
+function renderMemList() {
+    const data = getClockData();
+    const wrap = document.getElementById('memList');
+    wrap.innerHTML = '';
+    const copyWords = [...wordList];
+    copyWords.sort(()=>Math.random()-0.5);
+    const todayWords = copyWords.slice(0, data.target);
+    todayWords.forEach((item, idx)=>{
+        const div = document.createElement('div');
+        div.className = 'mem-item';
+        const isFinish = data.done.includes(item.word);
+        div.innerHTML = `
+            <div class="mem-word">${idx+1}. ${item.phonetic}</div>
+            <input class="mem-input" data-word="${item.word}" placeholder="默写英文单词" ${isFinish ? 'disabled value="'+item.word+'"':''}>
+            <div class="ans-box"></div>
+        `;
+        const input = div.querySelector('.mem-input');
+        const ansBox = div.querySelector('.ans-box');
+        if(isFinish) ansBox.className = 'answer-right', ansBox.textContent = `✅ 正确：${item.word} ${item.meaning}`;
+        input.onblur = function() {
+            const userAns = this.value.trim().toLowerCase();
+            const real = this.dataset.word.toLowerCase();
+            if(userAns === real) {
+                ansBox.className = 'answer-right';
+                ansBox.textContent = `✅ 正确：${this.dataset.word} ${item.meaning}`;
+                if(!data.done.includes(this.dataset.word)) {
+                    data.done.push(this.dataset.word);
+                    saveClockData(data);
+                    refreshClockStat();
+                }
+            } else {
+                ansBox.className = 'answer-wrong';
+                ansBox.textContent = `❌ 错误，标准答案：${this.dataset.word}`;
+            }
+        }
+        wrap.appendChild(div);
+    })
+}
+document.getElementById('resetTodayBtn').onclick = function() {
+    const data = getClockData();
+    data.done = [];
+    saveClockData(data);
+    renderMemList();
+    refreshClockStat();
+}
+document.getElementById('clearAllBtn').onclick = function() {
+    if(confirm("确认清空所有打卡记录，无法恢复？")) {
+        localStorage.removeItem(CLOCK_KEY);
+        refreshClockStat();
+        document.getElementById('memList').innerHTML = "";
+    }
+}
+
+// 页面加载初始化
+window.onload = function() {
+    initAlpha();
+    renderList(wordList);
+    refreshClockStat();
+}
+</script>
+</body>
+</html>
